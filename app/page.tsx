@@ -93,7 +93,7 @@ export default function Home() {
 
       <div
         ref={scrollRef}
-        className="flex flex-row overflow-x-hidden h-full pb-24"
+        className="flex flex-row overflow-x-hidden h-full pb-24 pt-[70px]"
         style={{ scrollbarWidth: "none" }}
       >
         {categories.map((cat, i) => (
@@ -105,7 +105,7 @@ export default function Home() {
                 : "opacity-60 scale-95 grayscale-0 filter-none pointer-events-none"
             }`}
           >
-            <div className="overflow-y-auto scrollbar-none max-h-[calc(100vh-160px)] w-full max-w-sm px-4">
+            <div className="overflow-y-auto scrollbar-none mt-4 max-h-[calc(100vh-160px)] w-full max-w-sm px-4">
               {menuItems[cat.id].map((item: MenuItem) => (
                 <div
                   key={item.label}
