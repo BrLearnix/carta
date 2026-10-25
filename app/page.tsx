@@ -13,17 +13,37 @@ const menuItems = {
     { label: "Hamburguesa Clásica", price: "$12.99", desc: "Carne de res, lechuga, tomate, cebolla y salsa especial" },
     { label: "Hamburguesa Queso", price: "$13.99", desc: "Carne de res con doble queso, especial salsa y jalapeños" },
     { label: "Hamburguesa Bacon", price: "$14.99", desc: "Carne de res con tocino derretido y BBQ sauce" },
-    { label: "Hamburguesa Vegetal", price: "$13.49", desc: "Alga, verduras asadas y aderezo especial" }
+    { label: "Hamburguesa Vegetal", price: "$13.49", desc: "Alga, verduras asadas y aderezo especial" },
+    { label: "Hamburguesa Doble", price: "$15.99", desc: "Doble carne de res, queso cheddar y cebolla caramelizada" },
+    { label: "Hamburguesa BBQ", price: "$14.49", desc: "Carne de res con salsa BBQ, aros de cebolla y pepinillos" },
+    { label: "Hamburguesa Picante", price: "$14.99", desc: "Carne de res con jalapeños, queso pepper jack y salsa chipotle" },
+    { label: "Hamburguesa Hawaiana", price: "$15.49", desc: "Carne de res, piña, jamón y salsa teriyaki" },
+    { label: "Hamburguesa Trufa", price: "$17.99", desc: "Carne de res con queso brie, rúcula y crema de trufa" },
+    { label: "Hamburguesa Mexicana", price: "$15.99", desc: "Carne de res con frijoles, aguacate, pico de gallo y queso" }
   ],
   sandwiches: [
     { label: "Sándwich de Pollo", price: "$11.99", desc: "Pechuga de pollo a la parrilla, lechuga y aderezo" },
     { label: "Sándwich Club", price: "$13.49", desc: "Pavo, jamón, queso, tocino y huevo" },
-    { label: "Sándwich de Carne Asada", price: "$14.99", desc: "Carne asada con guacamole y salsa ranchera" }
+    { label: "Sándwich de Carne Asada", price: "$14.99", desc: "Carne asada con guacamole y salsa ranchera" },
+    { label: "Sándwich de Atún", price: "$12.49", desc: "Atún con mayonesa, apio, lechuga y tomate" },
+    { label: "Sándwich Caprese", price: "$12.99", desc: "Mozzarella, tomate, albahaca y pesto" },
+    { label: "Sándwich de Pulled Pork", price: "$14.49", desc: "Cerdo desmenuzado con salsa BBQ y coleslaw" },
+    { label: "Sándwich Vegetariano", price: "$12.99", desc: "Hummus, pepino, tomate, aguacate y brotes" },
+    { label: "Sándwich Cubano", price: "$13.99", desc: "Cerdo, jamón, queso suizo, pepinillos y mostaza" },
+    { label: "Sándwich de Salmón", price: "$15.99", desc: "Salmón ahumado, queso crema, eneldo y cebolla roja" },
+    { label: "Sándwich BLT", price: "$11.49", desc: "Tocino, lechuga, tomate y mayonesa" }
   ],
   extras: [
     { label: "Papitas Fritas", price: "$4.99", desc: "Papa cortada en gajos crujiente" },
     { label: "Anillos de Cebolla", price: "$5.49", desc: "Cebolla empanizada y dorada" },
-    { label: "Ensalada Mixta", price: "$5.99", desc: "Verduras frescas con aderezo light" }
+    { label: "Ensalada Mixta", price: "$5.99", desc: "Verduras frescas con aderezo light" },
+    { label: "Aros de Queso", price: "$6.49", desc: "Queso mozzarella empanizado y frito" },
+    { label: "Nachos con Queso", price: "$7.49", desc: "Totopos con salsa de queso y jalapeños" },
+    { label: "Coleslaw", price: "$4.49", desc: "Repollo y zanahoria con aderezo cremoso" },
+    { label: "Papas Bravas", price: "$5.99", desc: "Papas con salsa brava y alioli" },
+    { label: "Palitos de Mozzarella", price: "$6.99", desc: "Palitos de queso rebozados y fritos" },
+    { label: "Alitas de Pollo", price: "$8.99", desc: "Alitas con salsa BBQ o buffalo" },
+    { label: "Guacamole con Totopos", price: "$6.49", desc: "Aguacate, cebolla, tomate y cilantro" }
   ]
 };
 
@@ -55,7 +75,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gray-950 overflow-hidden">
       <nav
-        className="fixed top-6 left-1/2 -translate-x-1/2 flex space-x-2 z-20"
+        className="fixed top-6 left-1/2 -translate-x-1/2 flex space-x-2 z-50"
         style={{ padding: "0 1rem" }}
       >
         {categories.map((cat, i) => (
@@ -80,37 +100,39 @@ export default function Home() {
         {categories.map((cat, i) => (
           <div
             key={cat.id}
-            className={`w-[100vw] min-w-[100vw] max-w-[100vw] flex-shrink-0 flex flex-col items-center justify-center transition-all duration-500 ease-out ${
+            className={`w-[100vw] min-w-[100vw] max-w-[100vw] flex-shrink-0 flex flex-col items-center transition-all duration-500 ease-out ${
               activeIndex === i
                 ? "opacity-100 scale-100 grayscale-0 filter-none"
                 : "opacity-60 scale-95 grayscale-0 filter-none pointer-events-none"
             }`}
           >
-            {menuItems[cat.id].map((item: MenuItem) => (
-              <div
-                key={item.label}
-                className="flex flex-row items-start justify-between gap-6 w-full max-w-sm bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl px-6 py-3 hover:bg-white/10 transition-colors duration-300 cursor-pointer mb-4"
-              >
-                <div className="flex-1 text-left">
-                  <h2 className="text-xl font-bold text-white mb-1 tracking-tight">
-                    {item.label}
-                  </h2>
-                  <p className="text-gray-400 text-sm leading-relaxed">
+            <div className="overflow-y-auto scrollbar-none max-h-[calc(100vh-160px)] w-full max-w-sm px-4">
+              {menuItems[cat.id].map((item: MenuItem) => (
+                <div
+                  key={item.label}
+                  className="flex flex-row items-start justify-between gap-6 w-full bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl px-6 py-3 hover:bg-white/10 transition-colors duration-300 cursor-pointer mb-4"
+                >
+                  <div className="flex-1 text-left">
+                    <h2 className="text-xl font-bold text-white mb-1 tracking-tight">
+                      {item.label}
+                    </h2>
+                  <p className="text-gray-400 text-xs leading-relaxed">
                     {item.desc || ""}
                   </p>
-                </div>
-                <div className="min-w-[90px] flex flex-col items-end gap-1">
-                  <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Precio
-                  </span>
-                  <div className="bg-orange-500/10 border border-orange-500/20 rounded-xl px-3 py-1.5">
-                    <span className="text-orange-400 font-bold text-lg">
-                      {item.price}
+                  </div>
+                  <div className="min-w-[90px] flex flex-col items-end gap-1">
+                    <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Precio
                     </span>
+                    <div className="bg-orange-500/10 border border-orange-500/20 rounded-xl px-3 py-1.5">
+                      <span className="text-orange-400 font-bold text-lg">
+                        {item.price}
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         ))}
       </div>
