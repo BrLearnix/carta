@@ -56,6 +56,9 @@ const categories = [
 export default function Home() {
   const [activeIndex, setActiveIndex] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const dragStartX = useRef(0);
+  const dragCurrentX = useRef(0);
+  const isDragging = useRef(false);
 
   const snapToPage = useCallback((index: number) => {
     setActiveIndex(index);
@@ -71,6 +74,37 @@ export default function Home() {
   const scrollToSection = useCallback((index: number) => {
     snapToPage(index);
   }, [snapToPage]);
+
+  const handleDragStart = useCallback((e: React.TouchEvent | React.MouseEvent) => {
+    const clientX = e.type === "mousedown"
+      ? (e as React.MouseEvent).clientX
+      : (e as React.TouchEvent).touches[0].clientX;
+    dragStartX.current = clientX;
+    dragCurrentX.current = clientX;
+    isDragging.current = true;
+  }, []);
+
+  const handleDragMove = useCallback((e: React.TouchEvent | React.MouseEvent) => {
+    if (!isDragging.current) return;
+    const clientX = e.type === "mousemove"
+      ? (e as React.MouseEvent).clientX
+      : (e as React.TouchEvent).touches[0].clientX;
+    dragCurrentX.current = clientX;
+  }, []);
+
+  const handleDragEnd = useCallback(() => {
+    if (!isDragging.current) return;
+    isDragging.current = false;
+    const diff = dragCurrentX.current - dragStartX.current;
+    const threshold = 60;
+    if (Math.abs(diff) > threshold) {
+      const nextIndex = diff < 0
+        ? Math.min(activeIndex + 1, categories.length - 1)
+        : Math.max(activeIndex - 1, 0);
+      setActiveIndex(nextIndex);
+      snapToPage(nextIndex);
+    }
+  }, [activeIndex, snapToPage, categories.length]);
 
   return (
     <div className="min-h-screen bg-gray-950 overflow-hidden">
@@ -95,6 +129,13 @@ export default function Home() {
         ref={scrollRef}
         className="flex flex-row overflow-x-hidden h-full pb-24 pt-[70px]"
         style={{ scrollbarWidth: "none" }}
+        onTouchStart={handleDragStart}
+        onTouchMove={handleDragMove}
+        onTouchEnd={handleDragEnd}
+        onMouseDown={handleDragStart}
+        onMouseMove={handleDragMove}
+        onMouseUp={handleDragEnd}
+        onMouseLeave={handleDragEnd}
       >
         {categories.map((cat, i) => (
           <div
