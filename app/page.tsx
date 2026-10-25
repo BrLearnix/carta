@@ -39,7 +39,7 @@ const menuItems = {
     { label: "Ensalada Mixta", price: "$5.99", desc: "Verduras frescas con aderezo light" },
     { label: "Aros de Queso", price: "$6.49", desc: "Queso mozzarella empanizado y frito" },
     { label: "Nachos con Queso", price: "$7.49", desc: "Totopos con salsa de queso y jalapeños" },
-    { label: "Coleslaw", price: "$4.49", desc: "Repollo y zanahoria con aderezo cremoso" },
+    { label: "Coleslawo", price: "$4.49", desc: "Repollo y zanahoria con aderezo cremoso" },
     { label: "Papas Bravas", price: "$5.99", desc: "Papas con salsa brava y alioli" },
     { label: "Palitos de Mozzarella", price: "$6.99", desc: "Palitos de queso rebozados y fritos" },
     { label: "Alitas de Pollo", price: "$8.99", desc: "Alitas con salsa BBQ o buffalo" },
