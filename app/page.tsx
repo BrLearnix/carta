@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 type MenuItem = {
   label: string;
@@ -36,14 +36,17 @@ const categories = [
 export default function Home() {
   const [activeIndex, setActiveIndex] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const isScrollingRef = useRef<boolean>(false);
+  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const scrollToSection = (index: number) => {
+  const snapToPage = (index: number, smooth = true) => {
     setActiveIndex(index);
     if (scrollRef.current) {
-      const section = scrollRef.current.children[index] as HTMLElement;
-      if (section) {
-        section.scrollIntoView({ behavior: "smooth", inline: "start" });
-      }
+      const containerWidth = scrollRef.current.clientWidth;
+      scrollRef.current.scrollTo({
+        left: index * containerWidth,
+        behavior: smooth ? "smooth" : "auto"
+      });
     }
   };
 
@@ -52,10 +55,36 @@ export default function Home() {
     const scrollLeft = container.scrollLeft;
     const containerWidth = container.clientWidth;
     const index = Math.round(scrollLeft / containerWidth);
+
+    if (!isScrollingRef.current) {
+      isScrollingRef.current = true;
+    }
+
+    if (scrollTimeoutRef.current) {
+      clearTimeout(scrollTimeoutRef.current);
+    }
+
+    scrollTimeoutRef.current = setTimeout(() => {
+      isScrollingRef.current = false;
+      snapToPage(Math.max(0, Math.min(categories.length - 1, index)), true);
+    }, 150);
+
     if (index >= 0 && index < categories.length) {
       setActiveIndex(index);
     }
   };
+
+  const scrollToSection = (index: number) => {
+    snapToPage(index, true);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-950 overflow-hidden">
@@ -79,13 +108,14 @@ export default function Home() {
 
       <div
         ref={scrollRef}
-        className="flex flex-row overflow-x-auto scroll-snap-type-x-mandatory snap-strict h-full no-scrollbar pt-24 pb-24"
+        className="flex flex-row overflow-x-auto snap-x h-full no-scrollbar pt-24 pb-24"
         onScroll={handleScroll}
+        style={{ scrollbarWidth: "none" }}
       >
         {categories.map((cat, i) => (
           <div
             key={cat.id}
-            className={`snap-align-start w-[100vw] min-w-[100vw] flex-shrink-0 flex flex-col items-center justify-center transition-all duration-500 ${
+            className={`w-[100vw] min-w-[100vw] flex-shrink-0 flex flex-col items-center justify-center transition-all duration-500 ${
               activeIndex === i
                 ? "opacity-100 scale-100 grayscale-0 filter-none"
                 : "opacity-45 scale-95 grayscale filter-[blur(2px)] pointer-events-none"
