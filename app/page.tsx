@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 
 type MenuItem = {
   label: string;
@@ -33,86 +33,102 @@ const categories = [
   { id: "extras", label: "Extras" }
 ] as const;
 
-const translateXValues = ["0%", "-100%", "-200%"];
-
-function getSectionClasses(index: number): string {
-  const isActive = index === 0 ? "bg-gray-900/80" : index === 1 ? "bg-gray-800/80" : "bg-gray-900/80";
-  const tx = translateXValues[index];
-  const rotate = index === 0 ? "rotateY(0deg)" : index === 1 ? "rotateY(-15deg)" : "rotateY(-30deg)";
-  const scale = index === 0 ? "1" : "0.9";
-  const perspective = "perspective(1000px)";
-  return `min-h-screen flex flex-col items-center justify-center ${isActive} ${perspective} transform translateX(${tx}) ${rotate} scale(${scale}) transition-transform duration-500 ease-out`;
-}
-
 export default function Home() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const swipeStartX = useRef<number>(0);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    swipeStartX.current = 0;
-  }, [activeIndex]);
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    swipeStartX.current = (e.touches[0] as Touch).clientX;
-  };
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    let clientXValue = swipeStartX.current;
-    if (e.changedTouches) {
-      const lastTouch = e.changedTouches[e.changedTouches.length - 1];
-      clientXValue = lastTouch.clientX;
-    } else if (e.touches) {
-      const firstTouch = e.touches[0];
-      clientXValue = firstTouch.clientX;
-    }
-    const diff = clientXValue - swipeStartX.current;
-    
-    if (Math.abs(diff) > 50) {
-      if (diff < 0 && activeIndex < 2) {
-        setActiveIndex(prev => prev + 1);
-      } else if (diff > 0 && activeIndex > 0) {
-        setActiveIndex(prev => prev - 1);
+  const scrollToSection = (index: number) => {
+    setActiveIndex(index);
+    if (scrollRef.current) {
+      const section = scrollRef.current.children[index] as HTMLElement;
+      if (section) {
+        section.scrollIntoView({ behavior: "smooth", inline: "start" });
       }
     }
   };
 
+  const handleScroll = (e: React.UIEvent) => {
+    const container = e.currentTarget as HTMLDivElement;
+    const scrollLeft = container.scrollLeft;
+    const containerWidth = container.clientWidth;
+    const index = Math.round(scrollLeft / containerWidth);
+    if (index >= 0 && index < categories.length) {
+      setActiveIndex(index);
+    }
+  };
+
   return (
-    <div
-      className="min-h-screen overflow-x-hidden swiping-container bg-gray-950"
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
-    >
+    <div className="min-h-screen bg-gray-950 overflow-hidden">
       <nav
-        className="fixed top-6 left-1/2 -translate-x-1/2 flex space-x-2 z-10"
-        style={{ padding: '0 1rem' }}
+        className="fixed top-6 left-1/2 -translate-x-1/2 flex space-x-2 z-20"
+        style={{ padding: "0 1rem" }}
       >
         {categories.map((cat, i) => (
           <button
             key={cat.id}
-            onClick={() => setActiveIndex(i)}
-            className={`px-4 py-2 rounded text-gray-300 text-sm font-medium transition-colors ${activeIndex === i ? 'text-orange-500' : 'hover:text-orange-400'}`}
+            onClick={() => scrollToSection(i)}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${activeIndex === i
+              ? "bg-white/10 text-orange-500 border border-orange-500/50 shadow-[0_0_15px_rgba(250,166,26,0.2)]"
+              : "text-gray-500 hover:text-orange-400 hover:bg-white/5 hover:border-white/10 border border-transparent"
+            }`}
           >
             {cat.label}
           </button>
         ))}
       </nav>
 
-      <div className={getSectionClasses(activeIndex)}>
-        {menuItems[categories[activeIndex].id].map((item: MenuItem) => (
-          <div key={item.label} className="w-full max-w-sm text-center">
-            <h2 className="text-xl font-bold text-gray-100 mb-2">{item.label}</h2>
-            <p className="text-gray-400 text-sm mb-4">{item.desc || ""}</p>
-            <div className="text-orange-400 text-lg font-bold">{item.price}</div>
+      <div
+        ref={scrollRef}
+        className="flex flex-row overflow-x-auto scroll-snap-x h-full no-scrollbar -mx-4 pt-24 pb-24"
+        onScroll={handleScroll}
+      >
+        {categories.map((cat, i) => (
+          <div
+            key={cat.id}
+            className={`snap-start w-full min-w-full flex-shrink-0 flex flex-col items-center justify-center px-4 transition-all duration-500 ${
+              activeIndex === i
+                ? "opacity-100 scale-100 grayscale-0 filter-none"
+                : "opacity-45 scale-95 grayscale filter-[blur(2px)] pointer-events-none"
+            }`}
+          >
+            {menuItems[cat.id].map((item: MenuItem) => (
+              <div
+                key={item.label}
+                className="flex flex-row items-start justify-between gap-6 w-full max-w-sm bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl px-6 py-3 hover:bg-white/10 transition-colors duration-300 cursor-pointer mb-4"
+              >
+                <div className="flex-1 text-left">
+                  <h2 className="text-xl font-bold text-white mb-1 tracking-tight">
+                    {item.label}
+                  </h2>
+                  <p className="text-gray-400 text-sm leading-relaxed">
+                    {item.desc || ""}
+                  </p>
+                </div>
+                <div className="min-w-[90px] flex flex-col items-end gap-1">
+                  <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Precio
+                  </span>
+                  <div className="bg-orange-500/10 border border-orange-500/20 rounded-xl px-3 py-1.5">
+                    <span className="text-orange-400 font-bold text-lg">
+                      {item.price}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         ))}
       </div>
 
-      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 flex space-x-2 z-10">
+      <div className="fixed bottom-8 left-1/2 -translate-x-1/2 flex space-x-2 z-20">
         {categories.map((cat, i) => (
           <button
             key={cat.id}
-            onClick={() => setActiveIndex(i)}
-            className={`w-3 h-3 rounded-full ${activeIndex === i ? 'bg-orange-500' : 'bg-gray-700'} transition-colors`}
+            onClick={() => scrollToSection(i)}
+            className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${activeIndex === i
+              ? "bg-orange-500 w-5"
+              : "bg-gray-700"
+            }`}
             aria-label={`Ir a ${cat.label}`}
           />
         ))}
