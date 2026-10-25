@@ -79,13 +79,13 @@ export default function Home() {
 
       <div
         ref={scrollRef}
-        className="flex flex-row overflow-x-auto scroll-snap-x h-full no-scrollbar -mx-4 pt-24 pb-24"
+        className="flex flex-row overflow-x-auto scroll-snap-type-x-mandatory snap-strict h-full no-scrollbar pt-24 pb-24"
         onScroll={handleScroll}
       >
         {categories.map((cat, i) => (
           <div
             key={cat.id}
-            className={`snap-start w-full min-w-full flex-shrink-0 flex flex-col items-center justify-center px-4 transition-all duration-500 ${
+            className={`snap-align-start w-[100vw] min-w-[100vw] flex-shrink-0 flex flex-col items-center justify-center transition-all duration-500 ${
               activeIndex === i
                 ? "opacity-100 scale-100 grayscale-0 filter-none"
                 : "opacity-45 scale-95 grayscale filter-[blur(2px)] pointer-events-none"
