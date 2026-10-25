@@ -75,7 +75,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gray-950 overflow-hidden">
       <nav
-        className="fixed top-0 left-0 w-full z-50 isolate bg-black/80 backdrop-blur-md border-b border-white/10 flex justify-center items-center gap-2 px-4 py-3 shadow-2xl"
+        className="fixed top-0 left-0 w-full z-50 isolate bg-black/80 backdrop-blur-md border-b border-white/10 flex items-center justify-center gap-2 px-4 h-[70px] shadow-2xl"
       >
         {categories.map((cat, i) => (
           <button
