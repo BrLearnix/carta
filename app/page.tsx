@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState, useRef, useCallback } from "react";
 
 type MenuItem = {
   label: string;
@@ -33,45 +33,55 @@ const categories = [
   { id: "extras", label: "Extras" }
 ] as const;
 
+const SWIPE_THRESHOLD = 50;
+
 export default function Home() {
   const [activeIndex, setActiveIndex] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const touchStartX = useRef<number>(0);
 
-  const scrollToPage = useCallback((index: number) => {
+  const getContainerWidth = useCallback(() => {
+    return scrollRef.current?.clientWidth || window.innerWidth;
+  }, []);
+
+  const snapToPage = useCallback((index: number) => {
     setActiveIndex(index);
     if (scrollRef.current) {
-      const containerWidth = scrollRef.current.clientWidth;
+      const width = getContainerWidth();
       scrollRef.current.scrollTo({
-        left: index * containerWidth,
+        left: index * width,
         behavior: "smooth"
       });
     }
-  }, []);
+  }, [getContainerWidth]);
 
-  const handleScroll = useCallback(() => {
-    if (scrollTimeoutRef.current) {
-      clearTimeout(scrollTimeoutRef.current);
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const endX = e.changedTouches[0].clientX;
+    const diff = touchStartX.current - endX;
+    const width = getContainerWidth();
+    const currentScrollLeft = scrollRef.current?.scrollLeft || 0;
+    const currentPage = Math.round(currentScrollLeft / width);
+
+    let targetIndex = currentPage;
+
+    if (diff > SWIPE_THRESHOLD) {
+      // Swipe left -> next page
+      targetIndex = Math.min(categories.length - 1, currentPage + 1);
+    } else if (diff < -SWIPE_THRESHOLD) {
+      // Swipe right -> previous page
+      targetIndex = Math.max(0, currentPage - 1);
     }
 
-    scrollTimeoutRef.current = setTimeout(() => {
-      if (scrollRef.current) {
-        const containerWidth = scrollRef.current.clientWidth;
-        const scrollLeft = scrollRef.current.scrollLeft;
-        const index = Math.round(scrollLeft / containerWidth);
-        const clampedIndex = Math.max(0, Math.min(categories.length - 1, index));
-        setActiveIndex(clampedIndex);
-      }
-    }, 100);
-  }, []);
+    snapToPage(targetIndex);
+  };
 
-  useEffect(() => {
-    return () => {
-      if (scrollTimeoutRef.current) {
-        clearTimeout(scrollTimeoutRef.current);
-      }
-    };
-  }, []);
+  const scrollToSection = (index: number) => {
+    snapToPage(index);
+  };
 
   return (
     <div className="min-h-screen bg-gray-950 overflow-hidden">
@@ -82,7 +92,7 @@ export default function Home() {
         {categories.map((cat, i) => (
           <button
             key={cat.id}
-            onClick={() => scrollToPage(i)}
+            onClick={() => scrollToSection(i)}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${activeIndex === i
               ? "bg-white/10 text-orange-500 border border-orange-500/50 shadow-[0_0_15px_rgba(250,166,26,0.2)]"
               : "text-gray-500 hover:text-orange-400 hover:bg-white/5 hover:border-white/10 border border-transparent"
@@ -95,14 +105,15 @@ export default function Home() {
 
       <div
         ref={scrollRef}
-        className="flex flex-row overflow-x-auto scroll-snap-type-x-mandatory snap-strict h-full no-scrollbar pt-24 pb-24"
-        onScroll={handleScroll}
-        style={{ scrollbarWidth: "none" }}
+        className="flex flex-row overflow-x-auto h-full no-scrollbar pt-24 pb-24"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        style={{ scrollbarWidth: "none", scrollBehavior: "auto" }}
       >
         {categories.map((cat, i) => (
           <div
             key={cat.id}
-            className={`scroll-snap-align-start w-[100vw] min-w-[100vw] max-w-[100vw] flex-shrink-0 flex flex-col items-center justify-center transition-all duration-500 ease-out ${
+            className={`w-[100vw] min-w-[100vw] max-w-[100vw] flex-shrink-0 flex flex-col items-center justify-center transition-all duration-500 ease-out ${
               activeIndex === i
                 ? "opacity-100 scale-100 grayscale-0 filter-none"
                 : "opacity-45 scale-95 grayscale filter-[blur(2px)] pointer-events-none"
@@ -141,7 +152,7 @@ export default function Home() {
         {categories.map((cat, i) => (
           <button
             key={cat.id}
-            onClick={() => scrollToPage(i)}
+            onClick={() => scrollToSection(i)}
             className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${activeIndex === i
               ? "bg-orange-500 w-5"
               : "bg-gray-700"
