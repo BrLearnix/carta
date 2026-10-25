@@ -38,7 +38,10 @@ const translateXValues = ["0%", "-100%", "-200%"];
 function getSectionClasses(index: number): string {
   const isActive = index === 0 ? "bg-gray-900/80" : index === 1 ? "bg-gray-800/80" : "bg-gray-900/80";
   const tx = translateXValues[index];
-  return `min-h-screen flex flex-col items-center justify-center ${isActive} transform translateX(${tx}) transition-transform duration-700 ease-out`;
+  const rotate = index === 0 ? "rotateY(0deg)" : index === 1 ? "rotateY(-15deg)" : "rotateY(-30deg)";
+  const scale = index === 0 ? "1" : "0.9";
+  const perspective = "perspective(1000px)";
+  return `min-h-screen flex flex-col items-center justify-center ${isActive} ${perspective} transform translateX(${tx}) ${rotate} scale(${scale}) transition-transform duration-500 ease-out`;
 }
 
 export default function Home() {
