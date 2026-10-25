@@ -54,7 +54,7 @@ export default function Home() {
     const container = e.currentTarget as HTMLDivElement;
     const scrollLeft = container.scrollLeft;
     const containerWidth = container.clientWidth;
-    const index = Math.round(scrollLeft / containerWidth);
+    const scrollProgress = scrollLeft / containerWidth;
 
     if (!isScrollingRef.current) {
       isScrollingRef.current = true;
@@ -66,12 +66,14 @@ export default function Home() {
 
     scrollTimeoutRef.current = setTimeout(() => {
       isScrollingRef.current = false;
-      snapToPage(Math.max(0, Math.min(categories.length - 1, index)), true);
+      let targetIndex = activeIndex;
+      if (scrollProgress > activeIndex + 0.3) {
+        targetIndex = Math.min(categories.length - 1, activeIndex + 1);
+      } else if (scrollProgress < activeIndex - 0.3) {
+        targetIndex = Math.max(0, activeIndex - 1);
+      }
+      snapToPage(targetIndex, true);
     }, 150);
-
-    if (index >= 0 && index < categories.length) {
-      setActiveIndex(index);
-    }
   };
 
   const scrollToSection = (index: number) => {
