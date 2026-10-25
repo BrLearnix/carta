@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useCallback, useEffect } from "react";
+import React, { useState, useRef, useCallback } from "react";
 
 type MenuItem = {
   label: string;
@@ -33,87 +33,24 @@ const categories = [
   { id: "extras", label: "Extras" }
 ] as const;
 
-const SWIPE_THRESHOLD = 60;
-const SCROLL_END_DELAY = 200;
-
 export default function Home() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [isScrolling, setIsScrolling] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const touchStartX = useRef<number>(0);
-  const scrollEndTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const getPageWidth = useCallback(() => {
-    return scrollRef.current?.clientWidth || window.innerWidth;
-  }, []);
-
-  const snapToPage = useCallback(
-    (index: number) => {
-      setActiveIndex(index);
-      if (scrollRef.current) {
-        const width = getPageWidth();
-        scrollRef.current.scrollTo({
-          left: index * width,
-          behavior: "smooth"
-        });
-      }
-    },
-    [getPageWidth]
-  );
-
-  const handleScrollEnd = useCallback(() => {
-    if (scrollEndTimeoutRef.current) {
-      clearTimeout(scrollEndTimeoutRef.current);
+  const snapToPage = useCallback((index: number) => {
+    setActiveIndex(index);
+    if (scrollRef.current) {
+      const width = scrollRef.current.clientWidth || window.innerWidth;
+      scrollRef.current.scrollTo({
+        left: index * width,
+        behavior: "smooth"
+      });
     }
-
-    scrollEndTimeoutRef.current = setTimeout(() => {
-      setIsScrolling(false);
-      if (scrollRef.current) {
-        const width = getPageWidth();
-        const scrollLeft = scrollRef.current.scrollLeft;
-        const pageIndex = Math.round(scrollLeft / width);
-        const clampedIndex = Math.max(0, Math.min(categories.length - 1, pageIndex));
-        setActiveIndex(clampedIndex);
-      }
-    }, SCROLL_END_DELAY);
-  }, [getPageWidth]);
-
-  const handleTouchStart = useCallback((e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX;
   }, []);
-
-  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
-    const endX = e.changedTouches[0].clientX;
-    const diff = touchStartX.current - endX;
-    const width = getPageWidth();
-    const currentScrollLeft = scrollRef.current?.scrollLeft || 0;
-    const currentPage = Math.round(currentScrollLeft / width);
-
-    let targetIndex = currentPage;
-
-    if (diff > SWIPE_THRESHOLD) {
-      targetIndex = Math.min(categories.length - 1, currentPage + 1);
-    } else if (diff < -SWIPE_THRESHOLD) {
-      targetIndex = Math.max(0, currentPage - 1);
-    }
-
-    setIsScrolling(true);
-    snapToPage(targetIndex);
-  }, [getPageWidth, snapToPage]);
 
   const scrollToSection = useCallback((index: number) => {
-    setIsScrolling(true);
     snapToPage(index);
-    setTimeout(() => setIsScrolling(false), 500);
   }, [snapToPage]);
-
-  useEffect(() => {
-    return () => {
-      if (scrollEndTimeoutRef.current) {
-        clearTimeout(scrollEndTimeoutRef.current);
-      }
-    };
-  }, []);
 
   return (
     <div className="min-h-screen bg-gray-950 overflow-hidden">
@@ -137,11 +74,8 @@ export default function Home() {
 
       <div
         ref={scrollRef}
-        className="flex flex-row overflow-x-auto h-full no-scrollbar pt-24 pb-24"
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
-        onScroll={handleScrollEnd}
-        style={{ scrollbarWidth: "none", scrollBehavior: "auto" }}
+        className="flex flex-row overflow-x-hidden h-full pt-24 pb-24"
+        style={{ scrollbarWidth: "none" }}
       >
         {categories.map((cat, i) => (
           <div
@@ -149,9 +83,7 @@ export default function Home() {
             className={`w-[100vw] min-w-[100vw] max-w-[100vw] flex-shrink-0 flex flex-col items-center justify-center transition-all duration-500 ease-out ${
               activeIndex === i
                 ? "opacity-100 scale-100 grayscale-0 filter-none"
-                : isScrolling
-                  ? "opacity-100 scale-100 grayscale-0 filter-none"
-                  : "opacity-60 scale-95 grayscale-0 filter-none pointer-events-none"
+                : "opacity-60 scale-95 grayscale-0 filter-none pointer-events-none"
             }`}
           >
             {menuItems[cat.id].map((item: MenuItem) => (
