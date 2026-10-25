@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 
 type MenuItem = {
   label: string;
@@ -36,49 +36,34 @@ const categories = [
 export default function Home() {
   const [activeIndex, setActiveIndex] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const isScrollingRef = useRef<boolean>(false);
-  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const snapToPage = (index: number, smooth = true) => {
+  const scrollToPage = useCallback((index: number) => {
     setActiveIndex(index);
     if (scrollRef.current) {
       const containerWidth = scrollRef.current.clientWidth;
       scrollRef.current.scrollTo({
         left: index * containerWidth,
-        behavior: smooth ? "smooth" : "auto"
+        behavior: "smooth"
       });
     }
-  };
+  }, []);
 
-  const handleScroll = (e: React.UIEvent) => {
-    const container = e.currentTarget as HTMLDivElement;
-    const scrollLeft = container.scrollLeft;
-    const containerWidth = container.clientWidth;
-    const scrollProgress = scrollLeft / containerWidth;
-
-    if (!isScrollingRef.current) {
-      isScrollingRef.current = true;
-    }
-
+  const handleScroll = useCallback(() => {
     if (scrollTimeoutRef.current) {
       clearTimeout(scrollTimeoutRef.current);
     }
 
     scrollTimeoutRef.current = setTimeout(() => {
-      isScrollingRef.current = false;
-      let targetIndex = activeIndex;
-      if (scrollProgress > activeIndex + 0.3) {
-        targetIndex = Math.min(categories.length - 1, activeIndex + 1);
-      } else if (scrollProgress < activeIndex - 0.3) {
-        targetIndex = Math.max(0, activeIndex - 1);
+      if (scrollRef.current) {
+        const containerWidth = scrollRef.current.clientWidth;
+        const scrollLeft = scrollRef.current.scrollLeft;
+        const index = Math.round(scrollLeft / containerWidth);
+        const clampedIndex = Math.max(0, Math.min(categories.length - 1, index));
+        setActiveIndex(clampedIndex);
       }
-      snapToPage(targetIndex, true);
-    }, 150);
-  };
-
-  const scrollToSection = (index: number) => {
-    snapToPage(index, true);
-  };
+    }, 100);
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -97,7 +82,7 @@ export default function Home() {
         {categories.map((cat, i) => (
           <button
             key={cat.id}
-            onClick={() => scrollToSection(i)}
+            onClick={() => scrollToPage(i)}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${activeIndex === i
               ? "bg-white/10 text-orange-500 border border-orange-500/50 shadow-[0_0_15px_rgba(250,166,26,0.2)]"
               : "text-gray-500 hover:text-orange-400 hover:bg-white/5 hover:border-white/10 border border-transparent"
@@ -110,14 +95,14 @@ export default function Home() {
 
       <div
         ref={scrollRef}
-        className="flex flex-row overflow-x-auto snap-x h-full no-scrollbar pt-24 pb-24"
+        className="flex flex-row overflow-x-auto scroll-snap-type-x-mandatory snap-strict h-full no-scrollbar pt-24 pb-24"
         onScroll={handleScroll}
         style={{ scrollbarWidth: "none" }}
       >
         {categories.map((cat, i) => (
           <div
             key={cat.id}
-            className={`w-[100vw] min-w-[100vw] flex-shrink-0 flex flex-col items-center justify-center transition-all duration-500 ${
+            className={`scroll-snap-align-start w-[100vw] min-w-[100vw] max-w-[100vw] flex-shrink-0 flex flex-col items-center justify-center transition-all duration-500 ease-out ${
               activeIndex === i
                 ? "opacity-100 scale-100 grayscale-0 filter-none"
                 : "opacity-45 scale-95 grayscale filter-[blur(2px)] pointer-events-none"
@@ -156,7 +141,7 @@ export default function Home() {
         {categories.map((cat, i) => (
           <button
             key={cat.id}
-            onClick={() => scrollToSection(i)}
+            onClick={() => scrollToPage(i)}
             className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${activeIndex === i
               ? "bg-orange-500 w-5"
               : "bg-gray-700"
