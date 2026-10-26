@@ -24,7 +24,7 @@ const menuItems = {
   sandwiches: [
     { label: "Sándwich de Pollo", price: "$11.99", desc: "Pechuga de pollo a la parrilla, lechuga y aderezo" },
     { label: "Sándwich Club", price: "$13.49", desc: "Pavo, jamón, queso, tocino y huevo" },
-    { label: "Sándwich de Carne Asada", price: "$14.99", desc: "Carne asada con guacamole y salsa ranchera" },
+    { label: "Sándwich de Carne Asada", price: "$14.99", desc: "Carne asada con guacamole y salsa ranchera y" },
     { label: "Sándwich de Atún", price: "$12.49", desc: "Atún con mayonesa, apio, lechuga y tomate" },
     { label: "Sándwich Caprese", price: "$12.99", desc: "Mozzarella, tomate, albahaca y pesto" },
     { label: "Sándwich de Pulled Pork", price: "$14.49", desc: "Cerdo desmenuzado con salsa BBQ y coleslaw" },
