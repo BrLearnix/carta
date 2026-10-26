@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback, useEffect } from "react";
 
 type MenuItem = {
   label: string;
@@ -61,25 +61,21 @@ const fondos = {
 
 export default function Home() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const dragStartX = useRef(0);
   const dragCurrentX = useRef(0);
   const isDragging = useRef(false);
 
-  const snapToPage = useCallback((index: number) => {
+  const goTo = useCallback((index: number) => {
+    if (index < 0 || index >= categories.length || index === activeIndex || isTransitioning) return;
+    setIsTransitioning(true);
     setActiveIndex(index);
-    if (scrollRef.current) {
-      const width = scrollRef.current.clientWidth || window.innerWidth;
-      scrollRef.current.scrollTo({
-        left: index * width,
-        behavior: "smooth"
-      });
-    }
-  }, []);
+    setTimeout(() => setIsTransitioning(false), 300);
+  }, [activeIndex, categories.length, isTransitioning]);
 
   const scrollToSection = useCallback((index: number) => {
-    snapToPage(index);
-  }, [snapToPage]);
+    goTo(index);
+  }, [goTo]);
 
   const handleDragStart = useCallback((e: React.TouchEvent | React.MouseEvent) => {
     const clientX = e.type === "mousedown"
@@ -107,10 +103,24 @@ export default function Home() {
       const nextIndex = diff < 0
         ? Math.min(activeIndex + 1, categories.length - 1)
         : Math.max(activeIndex - 1, 0);
-      setActiveIndex(nextIndex);
-      snapToPage(nextIndex);
+      goTo(nextIndex);
     }
-  }, [activeIndex, snapToPage, categories.length]);
+  }, [activeIndex, categories.length, goTo]);
+
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "ArrowRight") goTo(Math.min(activeIndex + 1, categories.length - 1));
+      if (e.key === "ArrowLeft") goTo(Math.max(activeIndex - 1, 0));
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [activeIndex, categories.length, goTo]);
+
+  const cat = categories[activeIndex];
+  const items = menuItems[cat.id];
+  const fondo = fondos[cat.id];
+
+  const dir = activeIndex > 0 ? "translate-x-[20px]" : "translate-x-[-20px]";
 
   return (
     <div className="min-h-screen bg-gray-950 overflow-hidden">
@@ -126,9 +136,7 @@ export default function Home() {
       </div>
 
       <div
-        ref={scrollRef}
-        className="flex flex-row overflow-x-hidden h-full pt-[80px] pb-1"
-        style={{ scrollbarWidth: "none" }}
+        className="relative h-full pt-[80px] pb-1 overflow-hidden"
         onTouchStart={handleDragStart}
         onTouchMove={handleDragMove}
         onTouchEnd={handleDragEnd}
@@ -137,19 +145,25 @@ export default function Home() {
         onMouseUp={handleDragEnd}
         onMouseLeave={handleDragEnd}
       >
-        {categories.map((cat, i) => (
+        <div
+          className={`relative w-full h-full flex items-center justify-center transition-all duration-300 ease-in-out overflow-hidden`}
+        >
           <div
             key={cat.id}
-            className={`relative w-[100vw] min-w-[100vw] max-w-[100vw] h-full flex-shrink-0 flex flex-col items-center transition-all duration-500 ease-out ${
-              activeIndex === i
-                ? "opacity-100 scale-100 grayscale-0 filter-none"
-                : "opacity-60 scale-95 grayscale-0 filter-none pointer-events-none"
+            className={`relative w-full max-w-sm h-full flex flex-col items-center ${
+              isTransitioning
+                ? "opacity-0 scale-95 pointer-events-none"
+                : "opacity-100 scale-100 pointer-events-auto"
             }`}
-            style={{ backgroundImage: `url("${fondos[cat.id]}")`, backgroundSize: "cover", backgroundPosition: "center" }}
+            style={{
+              backgroundImage: `url("${fondo}")`,
+              backgroundSize: "cover",
+              backgroundPosition: "center"
+            }}
           >
             <div className="absolute inset-0 bg-black/70" />
-            <div className="relative z-10 overflow-y-auto scrollbar-none mt-4 max-h-[calc(100vh-160px)] w-full max-w-sm px-4 pb-1">
-              {menuItems[cat.id].map((item: MenuItem) => (
+            <div className="relative z-10 overflow-y-auto scrollbar-none mt-4 max-h-[calc(100vh-160px)] w-full px-4 pb-1 overscroll-contain">
+              {items.map((item: MenuItem) => (
                 <div
                   key={item.label}
                   className="flex flex-row items-start justify-between gap-6 w-full bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl px-6 py-3 hover:bg-white/10 transition-colors duration-300 cursor-pointer mb-4"
@@ -158,9 +172,9 @@ export default function Home() {
                     <h2 className="text-xl font-bold text-white mb-1 tracking-tight">
                       {item.label}
                     </h2>
-                  <p className="text-gray-400 text-xs leading-relaxed">
-                    {item.desc || ""}
-                  </p>
+                    <p className="text-gray-400 text-xs leading-relaxed">
+                      {item.desc || ""}
+                    </p>
                   </div>
                   <div className="min-w-[90px] flex flex-col items-end gap-1">
                     <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -176,7 +190,7 @@ export default function Home() {
               ))}
             </div>
           </div>
-        ))}
+        </div>
       </div>
 
       <div
@@ -187,6 +201,7 @@ export default function Home() {
             <button
               key={cat.id}
               onClick={() => scrollToSection(i)}
+              disabled={isTransitioning}
               className={`px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 ${activeIndex === i
                 ? "bg-orange-500 text-white border border-orange-500/50 shadow-[0_0_20px_rgba(250,166,26,0.3)]"
                 : "text-gray-400 hover:text-orange-400 hover:bg-white/5 border border-transparent"
@@ -202,6 +217,7 @@ export default function Home() {
             <button
               key={cat.id}
               onClick={() => scrollToSection(i)}
+              disabled={isTransitioning}
               className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${activeIndex === i
                 ? "bg-orange-500 w-5"
                 : "bg-gray-700"
