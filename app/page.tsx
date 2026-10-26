@@ -127,7 +127,7 @@ export default function Home() {
 
       <div
         ref={scrollRef}
-        className="flex flex-row overflow-x-hidden h-full pb-32"
+        className="flex flex-row overflow-x-hidden h-full pt-[80px] pb-32"
         style={{ scrollbarWidth: "none" }}
         onTouchStart={handleDragStart}
         onTouchMove={handleDragMove}
