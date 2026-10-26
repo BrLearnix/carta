@@ -53,6 +53,12 @@ const categories = [
   { id: "extras", label: "Extras" }
 ] as const;
 
+const fondos = {
+  burgers: "/img/fondos/hamburguesa.jpg",
+  sandwiches: "/img/fondos/sandwich.jpg",
+  extras: "/img/fondos/extra.jpg"
+};
+
 export default function Home() {
   const [activeIndex, setActiveIndex] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -140,13 +146,15 @@ export default function Home() {
         {categories.map((cat, i) => (
           <div
             key={cat.id}
-            className={`w-[100vw] min-w-[100vw] max-w-[100vw] flex-shrink-0 flex flex-col items-center transition-all duration-500 ease-out ${
+            className={`relative w-[100vw] min-w-[100vw] max-w-[100vw] h-full flex-shrink-0 flex flex-col items-center transition-all duration-500 ease-out ${
               activeIndex === i
                 ? "opacity-100 scale-100 grayscale-0 filter-none"
                 : "opacity-60 scale-95 grayscale-0 filter-none pointer-events-none"
             }`}
+            style={{ backgroundImage: `url("${fondos[cat.id]}")`, backgroundSize: "cover", backgroundPosition: "center" }}
           >
-            <div className="overflow-y-auto scrollbar-none mt-4 max-h-[calc(100vh-160px)] w-full max-w-sm px-4">
+            <div className="absolute inset-0 bg-black/70" />
+            <div className="relative z-10 overflow-y-auto scrollbar-none mt-4 max-h-[calc(100vh-160px)] w-full max-w-sm px-4">
               {menuItems[cat.id].map((item: MenuItem) => (
                 <div
                   key={item.label}
