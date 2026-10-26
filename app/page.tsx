@@ -114,26 +114,20 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-950 overflow-hidden">
-      <nav
-        className="fixed top-0 left-0 w-full z-50 isolate bg-black backdrop-blur-md border-b border-white/10 flex items-center justify-center gap-2 px-4 h-[70px] shadow-2xl"
+      <div
+        className="fixed top-0 left-0 w-full z-50 isolate flex items-center justify-center px-4 py-6 bg-black backdrop-blur-md border-b border-white/10 shadow-2xl"
       >
-        {categories.map((cat, i) => (
-          <button
-            key={cat.id}
-            onClick={() => scrollToSection(i)}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${activeIndex === i
-              ? "bg-white/10 text-orange-500 border border-orange-500/50 shadow-[0_0_15px_rgba(250,166,26,0.2)]"
-              : "text-gray-500 hover:text-orange-400 hover:bg-white/5 hover:border-white/10 border border-transparent"
-            }`}
-          >
-            {cat.label}
-          </button>
-        ))}
-      </nav>
+        <div className="flex items-center gap-2">
+          <div className="w-10 h-10 rounded-full bg-orange-500 flex items-center justify-center shadow-[0_0_20px_rgba(250,166,26,0.4)]">
+            <span className="text-white font-bold text-xl">C</span>
+          </div>
+          <span className="text-2xl font-bold text-white tracking-wider italic">CARTA</span>
+        </div>
+      </div>
 
       <div
         ref={scrollRef}
-        className="flex flex-row overflow-x-hidden h-full pb-24 pt-[70px]"
+        className="flex flex-row overflow-x-hidden h-full pb-32"
         style={{ scrollbarWidth: "none" }}
         onTouchStart={handleDragStart}
         onTouchMove={handleDragMove}
@@ -185,18 +179,37 @@ export default function Home() {
         ))}
       </div>
 
-      <div className="fixed bottom-8 left-1/2 -translate-x-1/2 flex space-x-2 z-20">
-        {categories.map((cat, i) => (
-          <button
-            key={cat.id}
-            onClick={() => scrollToSection(i)}
-            className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${activeIndex === i
-              ? "bg-orange-500 w-5"
-              : "bg-gray-700"
-            }`}
-            aria-label={`Ir a ${cat.label}`}
-          />
-        ))}
+      <div
+        className="fixed bottom-8 left-0 w-full z-50 isolate flex flex-col items-center gap-2 px-4 pb-4 bg-black/60 backdrop-blur-md border-t border-white/10 rounded-t-2xl"
+      >
+        <nav className="flex space-x-2">
+          {categories.map((cat, i) => (
+            <button
+              key={cat.id}
+              onClick={() => scrollToSection(i)}
+              className={`px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 ${activeIndex === i
+                ? "bg-orange-500 text-white border border-orange-500/50 shadow-[0_0_20px_rgba(250,166,26,0.3)]"
+                : "text-gray-400 hover:text-orange-400 hover:bg-white/5 border border-transparent"
+              }`}
+            >
+              {cat.label}
+            </button>
+          ))}
+        </nav>
+
+        <div className="flex space-x-1.5 z-10">
+          {categories.map((cat, i) => (
+            <button
+              key={cat.id}
+              onClick={() => scrollToSection(i)}
+              className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${activeIndex === i
+                ? "bg-orange-500 w-5"
+                : "bg-gray-700"
+              }`}
+              aria-label={`Ir a ${cat.label}`}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
