@@ -127,7 +127,7 @@ export default function Home() {
 
       <div
         ref={scrollRef}
-        className="flex flex-row overflow-x-hidden h-full pt-[80px] pb-32"
+        className="flex flex-row overflow-x-hidden h-full pt-[80px] pb-1"
         style={{ scrollbarWidth: "none" }}
         onTouchStart={handleDragStart}
         onTouchMove={handleDragMove}
@@ -148,7 +148,7 @@ export default function Home() {
             style={{ backgroundImage: `url("${fondos[cat.id]}")`, backgroundSize: "cover", backgroundPosition: "center" }}
           >
             <div className="absolute inset-0 bg-black/70" />
-            <div className="relative z-10 overflow-y-auto scrollbar-none mt-4 max-h-[calc(100vh-160px)] w-full max-w-sm px-4">
+            <div className="relative z-10 overflow-y-auto scrollbar-none mt-4 max-h-[calc(100vh-160px)] w-full max-w-sm px-4 pb-1">
               {menuItems[cat.id].map((item: MenuItem) => (
                 <div
                   key={item.label}
@@ -180,7 +180,7 @@ export default function Home() {
       </div>
 
       <div
-        className="fixed bottom-8 left-0 w-full z-50 isolate flex flex-col items-center gap-2 px-4 pb-4 bg-black/60 backdrop-blur-md border-t border-white/10 rounded-t-2xl"
+        className="fixed bottom-0 left-0 w-full z-50 isolate flex flex-col items-center gap-2 px-4 pb-2 bg-black/60 backdrop-blur-md border-t border-white/10 rounded-t-2xl"
       >
         <nav className="flex space-x-2">
           {categories.map((cat, i) => (
