@@ -181,7 +181,7 @@ export default function Home() {
                       Precio
                     </span>
                     <div className="bg-orange-500/10 border border-orange-500/20 rounded-xl px-3 py-1.5">
-                      <span className="text-orange-400 font-bold text-lg">
+                      <span className="text-orange-300 font-bold text-lg">
                         {item.price}
                       </span>
                     </div>
