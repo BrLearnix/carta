@@ -181,6 +181,7 @@ const fondos = {
 
 const SLIDE_THRESHOLD = 70;
 const INTENT_THRESHOLD = 8;
+const SLIDE_TRANSITION = "420ms cubic-bezier(0.25, 1, 0.35, 1)";
 
 export default function Home() {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -190,6 +191,18 @@ export default function Home() {
   const dragStartY = useRef(0);
   const engaged = useRef(false);
   const aborted = useRef(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [vw, setVw] = useState(1);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const update = () => setVw(el.clientWidth || 1);
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
 
   const handlePointerDown = useCallback((e: React.PointerEvent) => {
     if (e.pointerType === "mouse" && e.button !== 0) return;
@@ -298,6 +311,7 @@ export default function Home() {
         className={`relative h-full pt-[104px] sm:pt-[96px] pb-1 overflow-hidden select-none ${
           isDragging ? "cursor-grabbing" : "cursor-grab"
         }`}
+        ref={containerRef}
         style={{ touchAction: "pan-y" }}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
@@ -308,27 +322,40 @@ export default function Home() {
           className="flex h-full will-change-transform"
           style={{
             transform: `translateX(calc(${-activeIndex * 100}% + ${dragPx}px))`,
-            transition: isDragging
-              ? "none"
-              : "transform 350ms cubic-bezier(0.22, 1, 0.36, 1)",
+            transition: isDragging ? "none" : `transform ${SLIDE_TRANSITION}`,
+            perspective: "1400px",
           }}
         >
           {categories.map((cat, i) => {
-            const offset = Math.abs(i - activeIndex);
+            const pos = i - activeIndex + (isDragging ? dragPx / vw : 0);
+            const dist = Math.min(Math.abs(pos), 1);
+            const scale = 1 - dist * 0.06;
+            const opacity = 1 - dist * 0.35;
+            const rotateY = Math.max(-1, Math.min(1, pos)) * -6;
             return (
               <div
                 key={cat.id}
                 className="relative h-full w-full min-w-full flex-shrink-0 flex flex-col items-center"
+                style={{
+                  transform: `scale(${scale}) rotateY(${rotateY}deg)`,
+                  opacity,
+                  transition: isDragging
+                    ? "none"
+                    : `transform ${SLIDE_TRANSITION}, opacity ${SLIDE_TRANSITION}`,
+                }}
               >
-                <div
-                  className="relative w-full max-w-sm h-full flex flex-col items-center"
-                  style={{
-                    backgroundImage: `url("${fondos[cat.id]}")`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                  }}
-                >
-                  <div className="absolute inset-0 bg-black/70" />
+                <div className="relative w-full max-w-sm h-full flex flex-col items-center overflow-hidden">
+                  <div
+                    className="absolute -inset-12 will-change-transform"
+                    style={{
+                      backgroundImage: `url("${fondos[cat.id]}")`,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                      transform: `translateX(${pos * 40}px)`,
+                      transition: isDragging ? "none" : `transform ${SLIDE_TRANSITION}`,
+                    }}
+                  />
+                  <div className="absolute inset-0 bg-black/60" />
                   <div className="relative z-10 flex flex-wrap justify-center gap-1.5 mt-3 px-4">
                     {["Al momento", "Ingredientes frescos", "Salsas de la casa"].map(
                       (s) => (
@@ -353,10 +380,7 @@ export default function Home() {
                     )}
                   </div>
                   <div
-                    className="relative z-10 overflow-y-auto scrollbar-none mt-3 max-h-[calc(100vh-260px)] w-full px-4 pb-1 overscroll-contain transition-opacity duration-300"
-                    style={{
-                      opacity: isDragging && offset > 0 ? 0.6 : 1,
-                    }}
+                    className="relative z-10 overflow-y-auto scrollbar-none mt-3 max-h-[calc(100vh-260px)] w-full px-4 pb-1 overscroll-contain"
                   >
                     {menuItems[cat.id].map((item: MenuItem, ii) => (
                       <div
