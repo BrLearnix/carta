@@ -204,8 +204,38 @@ export default function Home() {
     return () => ro.disconnect();
   }, []);
 
+  const dragPxRef = useRef(0);
+  const activeIndexRef = useRef(0);
+
+  useEffect(() => {
+    activeIndexRef.current = activeIndex;
+  }, [activeIndex]);
+
+  const applyDrag = useCallback((dx: number) => {
+    const idx = activeIndexRef.current;
+    const atFirstEdge = idx === 0 && dx > 0;
+    const atLastEdge = idx === categories.length - 1 && dx < 0;
+    const applied = atFirstEdge || atLastEdge ? dx * 0.35 : dx;
+    dragPxRef.current = applied;
+    setDragPx(applied);
+  }, []);
+
+  const commitDrag = useCallback(() => {
+    engaged.current = false;
+    const dp = dragPxRef.current;
+    dragPxRef.current = 0;
+    setDragPx(0);
+    setIsDragging(false);
+    const idx = activeIndexRef.current;
+    if (dp <= -SLIDE_THRESHOLD && idx < categories.length - 1) {
+      setActiveIndex(idx + 1);
+    } else if (dp >= SLIDE_THRESHOLD && idx > 0) {
+      setActiveIndex(idx - 1);
+    }
+  }, []);
+
   const handlePointerDown = useCallback((e: React.PointerEvent) => {
-    if (e.pointerType === "mouse" && e.button !== 0) return;
+    if (e.pointerType !== "mouse" || e.button !== 0) return;
     dragStartX.current = e.clientX;
     dragStartY.current = e.clientY;
     engaged.current = false;
@@ -214,7 +244,7 @@ export default function Home() {
 
   const handlePointerMove = useCallback(
     (e: React.PointerEvent) => {
-      if (e.pointerType === "mouse" && e.buttons !== 1) return;
+      if (e.pointerType !== "mouse" || e.buttons !== 1) return;
       const dx = e.clientX - dragStartX.current;
       const dy = e.clientY - dragStartY.current;
 
@@ -233,24 +263,78 @@ export default function Home() {
         }
       }
 
-      const atFirstEdge = activeIndex === 0 && dx > 0;
-      const atLastEdge = activeIndex === categories.length - 1 && dx < 0;
-      setDragPx(atFirstEdge || atLastEdge ? dx * 0.35 : dx);
+      applyDrag(dx);
     },
-    [activeIndex],
+    [applyDrag],
   );
 
   const handlePointerEnd = useCallback(() => {
     if (!engaged.current) return;
-    engaged.current = false;
-    setIsDragging(false);
-    setDragPx(0);
-    if (dragPx <= -SLIDE_THRESHOLD && activeIndex < categories.length - 1) {
-      setActiveIndex(activeIndex + 1);
-    } else if (dragPx >= SLIDE_THRESHOLD && activeIndex > 0) {
-      setActiveIndex(activeIndex - 1);
-    }
-  }, [activeIndex, dragPx]);
+    commitDrag();
+  }, [commitDrag]);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    let touchId: number | null = null;
+    let startX = 0;
+    let startY = 0;
+    let locked = false;
+    let vertical = false;
+
+    const onStart = (e: TouchEvent) => {
+      if (touchId !== null) return;
+      const t = e.changedTouches[0];
+      touchId = t.identifier;
+      startX = t.clientX;
+      startY = t.clientY;
+      locked = false;
+      vertical = false;
+    };
+
+    const onMove = (e: TouchEvent) => {
+      if (touchId === null || vertical) return;
+      const t = Array.from(e.changedTouches).find(
+        (c) => c.identifier === touchId,
+      );
+      if (!t) return;
+      const dx = t.clientX - startX;
+      const dy = t.clientY - startY;
+
+      if (!locked) {
+        if (Math.abs(dx) < INTENT_THRESHOLD && Math.abs(dy) < INTENT_THRESHOLD)
+          return;
+        if (Math.abs(dy) > Math.abs(dx)) {
+          vertical = true;
+          return;
+        }
+        locked = true;
+        setIsDragging(true);
+      }
+      if (e.cancelable) e.preventDefault();
+      applyDrag(dx);
+    };
+
+    const onEnd = () => {
+      if (touchId === null) return;
+      touchId = null;
+      if (locked) commitDrag();
+      locked = false;
+      vertical = false;
+    };
+
+    el.addEventListener("touchstart", onStart, { passive: true });
+    el.addEventListener("touchmove", onMove, { passive: false });
+    el.addEventListener("touchend", onEnd);
+    el.addEventListener("touchcancel", onEnd);
+    return () => {
+      el.removeEventListener("touchstart", onStart);
+      el.removeEventListener("touchmove", onMove);
+      el.removeEventListener("touchend", onEnd);
+      el.removeEventListener("touchcancel", onEnd);
+    };
+  }, [applyDrag, commitDrag]);
 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
