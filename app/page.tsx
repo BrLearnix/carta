@@ -131,7 +131,7 @@ const menuItems = {
     },
     {
       label: "Aros de Queso",
-      price: "$6.49",
+      price: "$6.48",
       desc: "Queso mozzarella empanizado y frito",
     },
     {
