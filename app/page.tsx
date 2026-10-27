@@ -161,7 +161,7 @@ const menuItems = {
     },
     {
       label: "Guacamole con Totopos",
-      price: "$6.49",
+      price: "$6.48",
       desc: "Aguacate, cebolla, tomate y cilantro",
     },
   ],
