@@ -440,31 +440,8 @@ export default function Home() {
                     }}
                   />
                   <div className="absolute inset-0 bg-black/60" />
-                  <div className="relative z-10 flex flex-wrap justify-center gap-1.5 mt-3 px-4">
-                    {["Al momento", "Ingredientes frescos", "Salsas de la casa"].map(
-                      (s) => (
-                        <span
-                          key={s}
-                          className="flex items-center gap-1 rounded-full bg-white/5 backdrop-blur-sm border border-orange-500/25 px-2.5 py-1 text-[9px] uppercase tracking-wider text-orange-200"
-                        >
-                          <svg
-                            viewBox="0 0 24 24"
-                            className="w-2.5 h-2.5 stroke-orange-400 shrink-0"
-                            fill="none"
-                            strokeWidth={3}
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            aria-hidden="true"
-                          >
-                            <path d="M5 13l4 4L19 7" />
-                          </svg>
-                          {s}
-                        </span>
-                      ),
-                    )}
-                  </div>
                   <div
-                    className="relative z-10 overflow-y-auto scrollbar-none mt-3 max-h-[calc(100vh-260px)] w-full px-4 pb-1 overscroll-contain"
+                    className="relative z-10 overflow-y-auto scrollbar-none mt-4 max-h-[calc(100vh-210px)] w-full px-4 pb-1 overscroll-contain"
                   >
                     {menuItems[cat.id].map((item: MenuItem, ii) => (
                       <div
