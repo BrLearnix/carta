@@ -18,7 +18,7 @@ const menuItems = {
     {
       label: "Hamburguesa Queso",
       price: "$13.99",
-      desc: "Carne de res con doble queso, especial salsa y jalapeños",
+      desc: "Carne de res con doble queso, salsa especial y jalapeños",
     },
     {
       label: "Hamburguesa Bacon",
@@ -75,7 +75,7 @@ const menuItems = {
     {
       label: "Sándwich de Carne Asada",
       price: "$14.99",
-      desc: "Carne asada con guacamole y salsa ranchera y",
+      desc: "Carne asada con guacamole y salsa ranchera",
     },
     {
       label: "Sándwich de Atún",
@@ -140,7 +140,7 @@ const menuItems = {
       desc: "Totopos con salsa de queso y jalapeños",
     },
     {
-      label: "Coleslawo",
+      label: "Coleslaw",
       price: "$4.49",
       desc: "Repollo y zanahoria con aderezo cremoso",
     },
@@ -168,9 +168,17 @@ const menuItems = {
 };
 
 const categories = [
-  { id: "burgers", label: "Hamburguesas" },
-  { id: "sandwiches", label: "Sándwiches" },
-  { id: "extras", label: "Extras" },
+  {
+    id: "burgers",
+    label: "Hamburguesas",
+    tagline: "De la parrilla a tu mesa",
+  },
+  {
+    id: "sandwiches",
+    label: "Sándwiches",
+    tagline: "Pan artesanal del día",
+  },
+  { id: "extras", label: "Extras", tagline: "Para acompañar" },
 ] as const;
 
 const fondos = {
@@ -347,52 +355,85 @@ export default function Home() {
   }, [activeIndex]);
 
   return (
-    <div className="min-h-screen bg-gray-950 overflow-hidden">
-      <header className="fixed top-0 left-0 w-full z-50 isolate flex items-center justify-between gap-2 sm:gap-4 px-3 sm:px-4 py-2.5 sm:py-3 bg-gradient-to-b from-black via-black/95 to-black/80 backdrop-blur-md border-b border-orange-500/20 shadow-[0_4px_24px_rgba(0,0,0,0.6)]">
-        <div className="flex flex-1 min-w-0 items-center justify-start">
-          <p className="sm:hidden text-[9px] uppercase tracking-[0.25em] text-orange-300/90 whitespace-nowrap">
-            ✦ A la parrilla
-          </p>
-          <div className="hidden sm:flex flex-col items-end gap-1.5 border-r-2 border-orange-500/40 pr-3 text-right">
-            <span className="text-[10px] font-medium uppercase tracking-[0.35em] text-orange-300 whitespace-nowrap">
-              Carne a la parrilla
-            </span>
-            <span className="text-[10px] font-medium uppercase tracking-[0.35em] text-gray-500 whitespace-nowrap">
-              Pan recién horneado
-            </span>
-          </div>
-        </div>
-
-        <div className="group relative shrink-0 rounded-full bg-gradient-to-br from-amber-400 via-orange-500 to-red-500 p-[3px] shadow-[0_0_30px_rgba(250,166,26,0.45)] transition-transform duration-300 hover:scale-105">
-          <img
-            src="/img/logo/logo1.png"
-            alt="Logo Doña Rosy"
-            className="w-14 h-14 rounded-full border-2 border-black block"
+    <div className="min-h-screen bg-[#0a0705] overflow-hidden">
+      <header className="fixed top-0 left-0 w-full z-50 isolate">
+        <div className="h-px w-full bg-gradient-to-r from-transparent via-amber-300/80 to-transparent" />
+        <div className="relative overflow-hidden border-b border-amber-500/20 bg-[#0b0805]/95 shadow-[0_16px_44px_rgba(0,0,0,0.75)] backdrop-blur-xl">
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-x-0 -top-24 h-44 bg-[radial-gradient(ellipse_at_center,rgba(245,158,11,0.16),transparent_70%)]"
           />
-          <span className="absolute inset-0 rounded-full ring-1 ring-white/20 pointer-events-none" />
-        </div>
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-0 bg-[linear-gradient(100deg,transparent_18%,rgba(255,255,255,0.035)_50%,transparent_82%)]"
+          />
 
-        <div className="flex flex-1 min-w-0 items-center justify-end">
-          <p className="sm:hidden text-[9px] uppercase tracking-[0.25em] text-orange-300/90 whitespace-nowrap">
-            Domicilio ✦
-          </p>
-          <div className="hidden sm:flex flex-col items-start gap-1.5 border-l-2 border-orange-500/40 pl-3">
-            <span className="text-[10px] font-medium uppercase tracking-[0.35em] text-orange-300 whitespace-nowrap">
-              Salsas de la casa
-            </span>
-            <span className="text-[10px] font-medium uppercase tracking-[0.35em] text-gray-500 whitespace-nowrap">
-              Entrega a domicilio
-            </span>
+          <div className="relative mx-auto flex max-w-5xl items-center justify-between gap-2 px-4 py-2.5 sm:px-8 sm:py-3">
+            <div className="flex min-w-0 flex-1 items-center justify-start sm:justify-end">
+              <div className="hidden items-center gap-4 sm:flex">
+                <div className="flex flex-col items-end gap-1 text-right">
+                  <span className="whitespace-nowrap text-[9px] font-medium uppercase tracking-[0.34em] text-amber-200/90">
+                    Carne a la parrilla
+                  </span>
+                  <span className="whitespace-nowrap text-[9px] uppercase tracking-[0.34em] text-stone-500">
+                    Pan artesanal
+                  </span>
+                </div>
+                <span className="hidden h-9 w-px bg-gradient-to-b from-transparent via-amber-500/45 to-transparent lg:block" />
+              </div>
+              <p className="truncate text-[8px] uppercase tracking-[0.2em] text-amber-300/70 sm:hidden">
+                A la parrilla
+              </p>
+            </div>
+
+            <div className="flex shrink-0 flex-col items-center">
+              <div className="group relative transition-transform duration-500 hover:scale-[1.04]">
+                <span className="pointer-events-none absolute -inset-5 rounded-full bg-amber-500/10 blur-lg" />
+                <span className="pointer-events-none absolute -inset-3 rounded-full border border-dashed border-amber-300/20" />
+                <span className="pointer-events-none absolute -inset-1.5 rounded-full border border-amber-400/30" />
+                <img
+                  src="/img/logo/logo1.png"
+                  alt="Logo Doña Rosy"
+                  className="relative block h-12 w-12 rounded-full object-cover shadow-[0_12px_28px_rgba(0,0,0,0.8)] ring-1 ring-amber-100/25 sm:h-[60px] sm:w-[60px]"
+                />
+              </div>
+              <span className="mt-2 text-[6.5px] font-medium uppercase tracking-[0.42em] text-amber-300/75 sm:text-[7.5px]">
+                Carta digital
+              </span>
+            </div>
+
+            <div className="flex min-w-0 flex-1 items-center justify-end sm:justify-start">
+              <span className="hidden h-9 w-px bg-gradient-to-b from-transparent via-amber-500/45 to-transparent lg:block" />
+              <div className="hidden flex-col items-start gap-1 sm:flex">
+                <span className="whitespace-nowrap text-[9px] font-medium uppercase tracking-[0.34em] text-amber-200/90">
+                  Salsas de la casa
+                </span>
+                <span className="whitespace-nowrap text-[9px] uppercase tracking-[0.34em] text-stone-500">
+                  Servicio a domicilio
+                </span>
+              </div>
+              <p className="truncate text-[8px] uppercase tracking-[0.2em] text-amber-300/70 sm:hidden">
+                A domicilio
+              </p>
+            </div>
+          </div>
+
+          <div className="relative border-t border-amber-500/10 py-1 text-center sm:hidden">
+            <p className="text-[7px] uppercase tracking-[0.26em] text-stone-500">
+              Hamburguesas y gorditas · Hechas a mano
+            </p>
+          </div>
+
+          <div className="relative hidden items-center justify-center gap-2 pb-1 sm:flex">
+            <span className="h-px w-24 bg-gradient-to-r from-transparent to-amber-500/40" />
+            <span className="text-[7px] leading-none text-amber-400/60">✦</span>
+            <span className="h-px w-24 bg-gradient-to-l from-transparent to-amber-500/40" />
           </div>
         </div>
       </header>
 
-      <p className="fixed top-[86px] left-0 w-full z-40 sm:hidden text-center text-[9px] uppercase tracking-[0.2em] text-gray-500 truncate px-4">
-        Hamburguesas y gorditas · Hechas a mano
-      </p>
-
       <div
-        className={`relative h-full pt-[104px] sm:pt-[96px] pb-1 overflow-hidden select-none ${
+        className={`relative h-full pt-[112px] sm:pt-[122px] pb-1 overflow-hidden select-none ${
           isDragging ? "cursor-grabbing" : "cursor-grab"
         }`}
         ref={containerRef}
@@ -428,7 +469,7 @@ export default function Home() {
                     : `transform ${SLIDE_TRANSITION}, opacity ${SLIDE_TRANSITION}`,
                 }}
               >
-                <div className="relative w-full max-w-sm h-full flex flex-col items-center overflow-hidden">
+                <div className="relative w-full max-w-[26rem] h-full flex flex-col items-center overflow-hidden">
                   <div
                     className="absolute -inset-12 will-change-transform"
                     style={{
@@ -436,46 +477,90 @@ export default function Home() {
                       backgroundSize: "cover",
                       backgroundPosition: "center",
                       transform: `translateX(${pos * 40}px)`,
-                      transition: isDragging ? "none" : `transform ${SLIDE_TRANSITION}`,
+                      transition: isDragging
+                        ? "none"
+                        : `transform ${SLIDE_TRANSITION}`,
                     }}
                   />
-                  <div className="absolute inset-0 bg-black/60" />
-                  <div
-                    className="relative z-10 overflow-y-auto scrollbar-none mt-4 max-h-[calc(100vh-210px)] w-full px-4 pb-1 overscroll-contain"
-                  >
-                    {menuItems[cat.id].map((item: MenuItem, ii) => (
-                      <div
-                        key={item.label}
-                        className="flex flex-row items-center gap-3.5 w-full bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl px-3.5 py-3 hover:bg-white/10 transition-colors duration-300 cursor-pointer mb-4"
-                      >
-                        <img
-                          src={fondos[cat.id]}
-                          alt={item.label}
-                          className="w-14 h-14 shrink-0 rounded-xl object-cover border border-orange-500/30 shadow-md"
-                          style={{
-                            objectPosition: ["center", "left center", "right center"][ii % 3],
-                          }}
-                        />
-                        <div className="flex-1 min-w-0 text-left">
-                          <h2 className="text-base font-bold text-white mb-0.5 tracking-tight truncate">
-                            {item.label}
-                          </h2>
-                          <p className="text-gray-400 text-xs leading-relaxed">
-                            {item.desc || ""}
-                          </p>
+                  <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/55 to-black/90" />
+
+                  <div className="relative z-10 mt-4 w-full max-h-[calc(100vh-232px)] overflow-y-auto scrollbar-none px-3 pb-2 overscroll-contain sm:max-h-[calc(100vh-244px)] sm:px-4">
+                    <article className="menu-paper relative overflow-hidden rounded-[24px] shadow-[0_30px_70px_-20px_rgba(0,0,0,0.85)] ring-1 ring-black/20">
+                      <span className="pointer-events-none absolute -top-px inset-x-8 h-[3px] rounded-b bg-gradient-to-r from-transparent via-[#b98b3f]/80 to-transparent" />
+                      <span className="pointer-events-none absolute inset-2 rounded-[20px] border border-[#b9975a]/40" />
+                      <span className="pointer-events-none absolute inset-3 rounded-[18px] border border-dashed border-[#b9975a]/25" />
+
+                      <div className="relative px-5 pb-3 pt-5 sm:px-6 sm:pt-6">
+                        <div className="flex items-center justify-between text-[8px] uppercase tracking-[0.3em] text-[#a1814d]">
+                          <span>Carta</span>
+                          <span>N.º {String(i + 1).padStart(2, "0")}</span>
                         </div>
-                        <div className="min-w-[74px] shrink-0 flex flex-col items-end gap-1">
-                          <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Precio
-                          </span>
-                          <div className="bg-orange-500/10 border border-orange-500/20 rounded-xl px-3 py-1.5">
-                            <span className="text-orange-300 font-bold text-lg">
-                              {item.price}
-                            </span>
-                          </div>
+                        <div className="mt-2 flex items-center gap-2.5">
+                          <span className="h-px flex-1 bg-gradient-to-r from-transparent to-[#c3a26a]" />
+                          <h2 className="font-display text-[22px] font-semibold tracking-wide text-[#2c1c0e] sm:text-2xl">
+                            {cat.label}
+                          </h2>
+                          <span className="h-px flex-1 bg-gradient-to-l from-transparent to-[#c3a26a]" />
+                        </div>
+                        <p className="mt-1.5 text-center text-[8px] uppercase tracking-[0.3em] text-[#a98a55]">
+                          {cat.tagline}
+                        </p>
+                        <div className="mt-3 flex items-center justify-center gap-1.5 text-[#b98b3f]/80">
+                          <span className="h-px w-6 bg-current" />
+                          <span className="text-[9px] leading-none">✦</span>
+                          <span className="h-px w-6 bg-current" />
                         </div>
                       </div>
-                    ))}
+
+                      <div className="relative px-4 pb-4 sm:px-5">
+                        {menuItems[cat.id].map((item: MenuItem, ii) => (
+                          <div
+                            key={item.label}
+                            className="group flex items-start gap-3 border-b border-dashed border-[#c9b189]/60 py-3 last:border-0"
+                          >
+                            <div className="relative mt-0.5 shrink-0">
+                              <img
+                                src={fondos[cat.id]}
+                                alt={item.label}
+                                className="h-11 w-11 rounded-full object-cover shadow-md ring-2 ring-[#d9c39a] transition-transform duration-300 group-hover:scale-105 sm:h-12 sm:w-12"
+                                style={{
+                                  objectPosition: [
+                                    "center",
+                                    "left center",
+                                    "right center",
+                                  ][ii % 3],
+                                }}
+                              />
+                              <span className="pointer-events-none absolute inset-0 rounded-full ring-1 ring-black/15" />
+                            </div>
+
+                            <div className="min-w-0 flex-1">
+                              <div className="flex items-baseline gap-1.5">
+                                <h3 className="font-display text-[15px] font-semibold leading-tight text-[#2a1a0e]">
+                                  {item.label}
+                                </h3>
+                                <span
+                                  aria-hidden
+                                  className="mb-1 flex-1 border-b border-dotted border-[#b49a6c]/70"
+                                />
+                                <span className="shrink-0 text-[13px] font-semibold tabular-nums text-[#b45309]">
+                                  {item.price}
+                                </span>
+                              </div>
+                              <p className="mt-1 text-[11px] leading-relaxed text-[#7a6449]">
+                                {item.desc || ""}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className="relative border-t border-[#c9b189]/50 bg-[#efe2c8]/60 px-5 py-2.5 text-center sm:px-6">
+                        <p className="text-[8px] uppercase tracking-[0.28em] text-[#9a7a45]">
+                          Gracias por su visita · Precios en USD
+                        </p>
+                      </div>
+                    </article>
                   </div>
                 </div>
               </div>
@@ -484,16 +569,16 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="fixed bottom-0 left-0 w-full z-50 isolate flex flex-col items-center gap-2 px-4 pb-2 bg-black/60 backdrop-blur-md border-t border-white/10 rounded-t-2xl">
-        <nav className="flex space-x-2">
+      <div className="fixed bottom-0 left-0 w-full z-50 isolate flex flex-col items-center gap-1.5 bg-gradient-to-t from-[#0a0705] via-[#0a0705]/95 to-transparent px-4 pb-2.5 pt-3">
+        <nav className="flex gap-1 rounded-2xl border border-amber-500/20 bg-black/55 p-1 shadow-[0_-8px_30px_rgba(0,0,0,0.6)] backdrop-blur-md">
           {categories.map((cat, i) => (
             <button
               key={cat.id}
               onClick={() => setActiveIndex(i)}
-              className={`px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 ${
+              className={`rounded-xl px-4 py-2 text-[13px] font-medium transition-all duration-300 sm:px-5 sm:py-2.5 sm:text-sm ${
                 activeIndex === i
-                  ? "bg-orange-500 text-white border border-orange-500/50 shadow-[0_0_20px_rgba(250,166,26,0.3)]"
-                  : "text-gray-400 hover:text-orange-400 hover:bg-white/5 border border-transparent"
+                  ? "bg-gradient-to-b from-amber-300 to-orange-500 text-[#2a160a] shadow-[0_0_20px_rgba(250,166,26,0.35)]"
+                  : "text-stone-400 hover:bg-white/5 hover:text-amber-300"
               }`}
             >
               {cat.label}
@@ -501,13 +586,15 @@ export default function Home() {
           ))}
         </nav>
 
-        <div className="flex space-x-1.5 z-10">
+        <div className="z-10 flex space-x-1.5">
           {categories.map((cat, i) => (
             <button
               key={cat.id}
               onClick={() => setActiveIndex(i)}
-              className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-                activeIndex === i ? "bg-orange-500 w-5" : "bg-gray-700"
+              className={`h-2 rounded-full transition-all duration-300 ${
+                activeIndex === i
+                  ? "w-6 bg-amber-400"
+                  : "w-2 bg-stone-700 hover:bg-stone-600"
               }`}
               aria-label={`Ir a ${cat.label}`}
             />
