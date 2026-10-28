@@ -389,10 +389,10 @@ export default function Home() {
           <div className="relative mx-auto flex max-w-3xl items-center justify-between gap-1 px-2.5 py-2.5 sm:px-6 sm:py-3">
             <div className="flex min-w-0 flex-1 flex-col items-start gap-1">
               <span className="h-px w-7 bg-gradient-to-r from-amber-300 to-transparent" />
-              <span className="font-food whitespace-nowrap text-[15px] leading-none tracking-[0.04em] text-amber-100 [text-shadow:0_2px_10px_rgba(0,0,0,0.95)] sm:text-lg">
+              <span className="font-food whitespace-nowrap text-[18px] leading-none tracking-[0.04em] text-amber-100 [text-shadow:0_2px_10px_rgba(0,0,0,0.95)] sm:text-xl">
                 A la parrilla
               </span>
-              <span className="hidden font-food whitespace-nowrap text-[13px] leading-none tracking-[0.06em] text-stone-300/80 sm:block">
+              <span className="hidden font-food whitespace-nowrap text-[15px] leading-none tracking-[0.06em] text-stone-300/80 sm:block">
                 Pan artesanal
               </span>
             </div>
@@ -412,17 +412,17 @@ export default function Home() {
 
             <div className="flex min-w-0 flex-1 flex-col items-end gap-1 text-right">
               <span className="h-px w-7 bg-gradient-to-l from-amber-300 to-transparent" />
-              <span className="font-food whitespace-nowrap text-[15px] leading-none tracking-[0.04em] text-amber-100 [text-shadow:0_2px_10px_rgba(0,0,0,0.95)] sm:text-lg">
+              <span className="font-food whitespace-nowrap text-[18px] leading-none tracking-[0.04em] text-amber-100 [text-shadow:0_2px_10px_rgba(0,0,0,0.95)] sm:text-xl">
                 A domicilio
               </span>
-              <span className="hidden font-food whitespace-nowrap text-[13px] leading-none tracking-[0.06em] text-stone-300/80 sm:block">
+              <span className="hidden font-food whitespace-nowrap text-[15px] leading-none tracking-[0.06em] text-stone-300/80 sm:block">
                 Salsas de la casa
               </span>
             </div>
           </div>
 
           <div className="relative border-t border-amber-500/15 bg-black/30 py-1 text-center backdrop-blur-sm sm:hidden">
-            <p className="font-food text-[10px] tracking-[0.22em] text-amber-200/80">
+            <p className="font-script text-[14px] leading-none tracking-[0.02em] text-amber-200 [text-shadow:0_2px_8px_rgba(0,0,0,0.9)]">
               Hamburguesas y gorditas · Hechas a mano
             </p>
           </div>
@@ -430,7 +430,7 @@ export default function Home() {
       </header>
 
       <div
-        className={`relative h-full pt-[120px] sm:pt-[118px] pb-1 overflow-hidden select-none ${
+        className={`relative h-full pt-[124px] sm:pt-[122px] pb-1 overflow-hidden select-none ${
           isDragging ? "cursor-grabbing" : "cursor-grab"
         }`}
         ref={containerRef}
@@ -481,7 +481,7 @@ export default function Home() {
                   />
                   <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.42),rgba(0,0,0,0.72)_58%,rgba(0,0,0,0.92))]" />
 
-                  <div className="relative z-10 mt-4 w-full max-h-[calc(100vh-232px)] overflow-y-auto scrollbar-none px-3 pb-2 overscroll-contain sm:max-h-[calc(100vh-230px)] sm:px-4">
+                  <div className="relative z-10 mt-4 w-full max-h-[calc(100vh-236px)] overflow-y-auto scrollbar-none px-3 pb-2 overscroll-contain sm:max-h-[calc(100vh-234px)] sm:px-4">
                     <article className="menu-paper relative overflow-hidden rounded-[26px] shadow-[0_34px_80px_-24px_rgba(0,0,0,0.9)] ring-1 ring-black/20">
                       <span className="pointer-events-none absolute inset-0 rounded-[26px] shadow-[inset_0_0_55px_rgba(120,90,50,0.12)]" />
                       <span className="pointer-events-none absolute -top-px inset-x-10 h-[3px] rounded-b bg-gradient-to-r from-transparent via-[#b98b3f]/80 to-transparent" />

@@ -5,6 +5,7 @@ import {
   Playfair_Display,
   Bebas_Neue,
   Cormorant_Garamond,
+  Kaushan_Script,
 } from "next/font/google";
 import "./globals.css";
 
@@ -39,6 +40,13 @@ const cormorant = Cormorant_Garamond({
   display: "swap",
 });
 
+const kaushan = Kaushan_Script({
+  variable: "--font-kaushan",
+  subsets: ["latin"],
+  weight: "400",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "Doña Rosy · Carta Digital",
   description:
@@ -49,7 +57,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="es"
-      className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} ${bebas.variable} ${cormorant.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} ${bebas.variable} ${cormorant.variable} ${kaushan.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
