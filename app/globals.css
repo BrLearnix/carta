@@ -38,6 +38,11 @@ body {
   font-family: var(--font-playfair), Georgia, "Times New Roman", serif;
 }
 
+.font-food {
+  font-family: var(--font-bebas), "Arial Narrow", Impact, sans-serif;
+  font-weight: 400;
+}
+
 .menu-paper {
   background-color: #f8f0df;
   background-image:

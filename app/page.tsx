@@ -357,83 +357,80 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[#0a0705] overflow-hidden">
       <header className="fixed top-0 left-0 w-full z-50 isolate">
-        <div className="h-px w-full bg-gradient-to-r from-transparent via-amber-300/80 to-transparent" />
-        <div className="relative overflow-hidden border-b border-amber-500/20 bg-[#0b0805]/95 shadow-[0_16px_44px_rgba(0,0,0,0.75)] backdrop-blur-xl">
-          <span
-            aria-hidden
-            className="pointer-events-none absolute inset-x-0 -top-24 h-44 bg-[radial-gradient(ellipse_at_center,rgba(245,158,11,0.16),transparent_70%)]"
-          />
-          <span
-            aria-hidden
-            className="pointer-events-none absolute inset-0 bg-[linear-gradient(100deg,transparent_18%,rgba(255,255,255,0.035)_50%,transparent_82%)]"
-          />
-
-          <div className="relative mx-auto flex max-w-5xl items-center justify-between gap-2 px-4 py-2.5 sm:px-8 sm:py-3">
-            <div className="flex min-w-0 flex-1 items-center justify-start sm:justify-end">
-              <div className="hidden items-center gap-4 sm:flex">
-                <div className="flex flex-col items-end gap-1 text-right">
-                  <span className="whitespace-nowrap text-[9px] font-medium uppercase tracking-[0.34em] text-amber-200/90">
-                    Carne a la parrilla
-                  </span>
-                  <span className="whitespace-nowrap text-[9px] uppercase tracking-[0.34em] text-stone-500">
-                    Pan artesanal
-                  </span>
-                </div>
-                <span className="hidden h-9 w-px bg-gradient-to-b from-transparent via-amber-500/45 to-transparent lg:block" />
-              </div>
-              <p className="truncate text-[8px] uppercase tracking-[0.2em] text-amber-300/70 sm:hidden">
-                A la parrilla
-              </p>
+        <div className="h-[2px] w-full bg-gradient-to-r from-transparent via-amber-300/90 to-transparent" />
+        <div className="relative overflow-hidden border-b border-amber-500/25 shadow-[0_16px_44px_rgba(0,0,0,0.8)]">
+          <div aria-hidden className="absolute inset-0 flex">
+            <div className="relative w-1/2 overflow-hidden">
+              <img
+                src="/img/fondos/hamburguesa.jpg"
+                alt=""
+                className="h-full w-full scale-125 object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#100a05]/95 via-[#100a05]/65 to-[#0b0805]" />
             </div>
+            <div className="relative w-1/2 overflow-hidden">
+              <img
+                src="/img/fondos/sandwich.jpg"
+                alt=""
+                className="h-full w-full scale-125 object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-l from-[#100a05]/95 via-[#100a05]/65 to-[#0b0805]" />
+            </div>
+          </div>
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#0b0805]/95 to-transparent"
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute left-1/2 top-1/2 h-44 w-44 -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-500/20 blur-3xl"
+          />
 
-            <div className="flex shrink-0 flex-col items-center">
-              <div className="group relative transition-transform duration-500 hover:scale-[1.04]">
-                <span className="pointer-events-none absolute -inset-5 rounded-full bg-amber-500/10 blur-lg" />
-                <span className="pointer-events-none absolute -inset-3 rounded-full border border-dashed border-amber-300/20" />
-                <span className="pointer-events-none absolute -inset-1.5 rounded-full border border-amber-400/30" />
-                <img
-                  src="/img/logo/logo1.png"
-                  alt="Logo Doña Rosy"
-                  className="relative block h-12 w-12 rounded-full object-cover shadow-[0_12px_28px_rgba(0,0,0,0.8)] ring-1 ring-amber-100/25 sm:h-[60px] sm:w-[60px]"
-                />
-              </div>
-              <span className="mt-2 text-[6.5px] font-medium uppercase tracking-[0.42em] text-amber-300/75 sm:text-[7.5px]">
-                Carta digital
+          <div className="relative mx-auto flex max-w-3xl items-center justify-between gap-1 px-2.5 py-2.5 sm:px-6 sm:py-3">
+            <div className="flex min-w-0 flex-1 flex-col items-start gap-1">
+              <span className="h-px w-7 bg-gradient-to-r from-amber-300 to-transparent" />
+              <span className="font-food whitespace-nowrap text-[15px] leading-none tracking-[0.04em] text-amber-100 [text-shadow:0_2px_10px_rgba(0,0,0,0.95)] sm:text-lg">
+                A la parrilla
+              </span>
+              <span className="hidden font-food whitespace-nowrap text-[13px] leading-none tracking-[0.06em] text-stone-300/80 sm:block">
+                Pan artesanal
               </span>
             </div>
 
-            <div className="flex min-w-0 flex-1 items-center justify-end sm:justify-start">
-              <span className="hidden h-9 w-px bg-gradient-to-b from-transparent via-amber-500/45 to-transparent lg:block" />
-              <div className="hidden flex-col items-start gap-1 sm:flex">
-                <span className="whitespace-nowrap text-[9px] font-medium uppercase tracking-[0.34em] text-amber-200/90">
-                  Salsas de la casa
-                </span>
-                <span className="whitespace-nowrap text-[9px] uppercase tracking-[0.34em] text-stone-500">
-                  Servicio a domicilio
-                </span>
+            <div className="flex shrink-0 flex-col items-center px-1">
+              <div className="relative transition-transform duration-500 hover:scale-105">
+                <span className="pointer-events-none absolute -inset-6 rounded-full bg-amber-400/15 blur-xl" />
+                <span className="pointer-events-none absolute -inset-3.5 rounded-full border border-dashed border-amber-300/25" />
+                <span className="pointer-events-none absolute -inset-1.5 rounded-full border border-amber-400/35" />
+                <img
+                  src="/img/logo/logo1.png"
+                  alt="Logo Doña Rosy"
+                  className="relative block h-[68px] w-[68px] rounded-full object-cover shadow-[0_14px_34px_rgba(0,0,0,0.9)] ring-2 ring-amber-100/30 sm:h-20 sm:w-20"
+                />
               </div>
-              <p className="truncate text-[8px] uppercase tracking-[0.2em] text-amber-300/70 sm:hidden">
+            </div>
+
+            <div className="flex min-w-0 flex-1 flex-col items-end gap-1 text-right">
+              <span className="h-px w-7 bg-gradient-to-l from-amber-300 to-transparent" />
+              <span className="font-food whitespace-nowrap text-[15px] leading-none tracking-[0.04em] text-amber-100 [text-shadow:0_2px_10px_rgba(0,0,0,0.95)] sm:text-lg">
                 A domicilio
-              </p>
+              </span>
+              <span className="hidden font-food whitespace-nowrap text-[13px] leading-none tracking-[0.06em] text-stone-300/80 sm:block">
+                Salsas de la casa
+              </span>
             </div>
           </div>
 
-          <div className="relative border-t border-amber-500/10 py-1 text-center sm:hidden">
-            <p className="text-[7px] uppercase tracking-[0.26em] text-stone-500">
+          <div className="relative border-t border-amber-500/15 bg-black/30 py-1 text-center backdrop-blur-sm sm:hidden">
+            <p className="font-food text-[10px] tracking-[0.22em] text-amber-200/80">
               Hamburguesas y gorditas · Hechas a mano
             </p>
-          </div>
-
-          <div className="relative hidden items-center justify-center gap-2 pb-1 sm:flex">
-            <span className="h-px w-24 bg-gradient-to-r from-transparent to-amber-500/40" />
-            <span className="text-[7px] leading-none text-amber-400/60">✦</span>
-            <span className="h-px w-24 bg-gradient-to-l from-transparent to-amber-500/40" />
           </div>
         </div>
       </header>
 
       <div
-        className={`relative h-full pt-[112px] sm:pt-[122px] pb-1 overflow-hidden select-none ${
+        className={`relative h-full pt-[120px] sm:pt-[118px] pb-1 overflow-hidden select-none ${
           isDragging ? "cursor-grabbing" : "cursor-grab"
         }`}
         ref={containerRef}
@@ -484,7 +481,7 @@ export default function Home() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/55 to-black/90" />
 
-                  <div className="relative z-10 mt-4 w-full max-h-[calc(100vh-232px)] overflow-y-auto scrollbar-none px-3 pb-2 overscroll-contain sm:max-h-[calc(100vh-244px)] sm:px-4">
+                  <div className="relative z-10 mt-4 w-full max-h-[calc(100vh-232px)] overflow-y-auto scrollbar-none px-3 pb-2 overscroll-contain sm:max-h-[calc(100vh-230px)] sm:px-4">
                     <article className="menu-paper relative overflow-hidden rounded-[24px] shadow-[0_30px_70px_-20px_rgba(0,0,0,0.85)] ring-1 ring-black/20">
                       <span className="pointer-events-none absolute -top-px inset-x-8 h-[3px] rounded-b bg-gradient-to-r from-transparent via-[#b98b3f]/80 to-transparent" />
                       <span className="pointer-events-none absolute inset-2 rounded-[20px] border border-[#b9975a]/40" />
