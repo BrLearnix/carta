@@ -479,72 +479,60 @@ export default function Home() {
                         : `transform ${SLIDE_TRANSITION}`,
                     }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/55 to-black/90" />
+                  <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.42),rgba(0,0,0,0.72)_58%,rgba(0,0,0,0.92))]" />
 
                   <div className="relative z-10 mt-4 w-full max-h-[calc(100vh-232px)] overflow-y-auto scrollbar-none px-3 pb-2 overscroll-contain sm:max-h-[calc(100vh-230px)] sm:px-4">
-                    <article className="menu-paper relative overflow-hidden rounded-[24px] shadow-[0_30px_70px_-20px_rgba(0,0,0,0.85)] ring-1 ring-black/20">
-                      <span className="pointer-events-none absolute -top-px inset-x-8 h-[3px] rounded-b bg-gradient-to-r from-transparent via-[#b98b3f]/80 to-transparent" />
-                      <span className="pointer-events-none absolute inset-2 rounded-[20px] border border-[#b9975a]/40" />
-                      <span className="pointer-events-none absolute inset-3 rounded-[18px] border border-dashed border-[#b9975a]/25" />
+                    <article className="menu-paper relative overflow-hidden rounded-[26px] shadow-[0_34px_80px_-24px_rgba(0,0,0,0.9)] ring-1 ring-black/20">
+                      <span className="pointer-events-none absolute inset-0 rounded-[26px] shadow-[inset_0_0_55px_rgba(120,90,50,0.12)]" />
+                      <span className="pointer-events-none absolute -top-px inset-x-10 h-[3px] rounded-b bg-gradient-to-r from-transparent via-[#b98b3f]/80 to-transparent" />
+                      <span className="pointer-events-none absolute inset-[7px] rounded-[20px] border border-[#b9975a]/45" />
+                      <span className="pointer-events-none absolute inset-[11px] rounded-[17px] border border-dashed border-[#b9975a]/25" />
 
-                      <div className="relative px-5 pb-3 pt-5 sm:px-6 sm:pt-6">
-                        <div className="flex items-center justify-between text-[8px] uppercase tracking-[0.3em] text-[#a1814d]">
-                          <span>Carta</span>
-                          <span>N.º {String(i + 1).padStart(2, "0")}</span>
-                        </div>
-                        <div className="mt-2 flex items-center gap-2.5">
-                          <span className="h-px flex-1 bg-gradient-to-r from-transparent to-[#c3a26a]" />
-                          <h2 className="font-display text-[22px] font-semibold tracking-wide text-[#2c1c0e] sm:text-2xl">
+                      <div className="relative px-5 pb-2.5 pt-4 text-center sm:pt-5">
+                        <div className="flex items-center justify-center gap-2.5">
+                          <span className="h-px w-7 bg-gradient-to-r from-transparent to-[#b98b3f]/70" />
+                          <h2 className="font-display text-[24px] leading-none tracking-[0.01em] text-[#33200f] sm:text-[26px]">
                             {cat.label}
                           </h2>
-                          <span className="h-px flex-1 bg-gradient-to-l from-transparent to-[#c3a26a]" />
+                          <span className="h-px w-7 bg-gradient-to-l from-transparent to-[#b98b3f]/70" />
                         </div>
-                        <p className="mt-1.5 text-center text-[8px] uppercase tracking-[0.3em] text-[#a98a55]">
+                        <p className="font-elegant mt-1 text-[13px] italic leading-none text-[#8a6a38]">
                           {cat.tagline}
                         </p>
-                        <div className="mt-3 flex items-center justify-center gap-1.5 text-[#b98b3f]/80">
-                          <span className="h-px w-6 bg-current" />
-                          <span className="text-[9px] leading-none">✦</span>
-                          <span className="h-px w-6 bg-current" />
-                        </div>
                       </div>
 
-                      <div className="relative px-4 pb-4 sm:px-5">
+                      <div className="relative px-3 pb-1.5 sm:px-4">
                         {menuItems[cat.id].map((item: MenuItem, ii) => (
                           <div
                             key={item.label}
-                            className="group flex items-start gap-3 border-b border-dashed border-[#c9b189]/60 py-3 last:border-0"
+                            className="group relative flex items-center gap-2.5 rounded-xl px-1 py-2 transition-colors duration-300 hover:bg-[#b9975a]/[0.06]"
                           >
-                            <div className="relative mt-0.5 shrink-0">
-                              <img
-                                src={fondos[cat.id]}
-                                alt={item.label}
-                                className="h-11 w-11 rounded-full object-cover shadow-md ring-2 ring-[#d9c39a] transition-transform duration-300 group-hover:scale-105 sm:h-12 sm:w-12"
-                                style={{
-                                  objectPosition: [
-                                    "center",
-                                    "left center",
-                                    "right center",
-                                  ][ii % 3],
-                                }}
-                              />
-                              <span className="pointer-events-none absolute inset-0 rounded-full ring-1 ring-black/15" />
-                            </div>
-
+                            <img
+                              src={fondos[cat.id]}
+                              alt={item.label}
+                              className="h-11 w-11 shrink-0 rounded-lg object-cover shadow-sm ring-1 ring-[#c9a86a]/70"
+                              style={{
+                                objectPosition: [
+                                  "center",
+                                  "left center",
+                                  "right center",
+                                ][ii % 3],
+                              }}
+                            />
                             <div className="min-w-0 flex-1">
-                              <div className="flex items-baseline gap-1.5">
-                                <h3 className="font-display text-[15px] font-semibold leading-tight text-[#2a1a0e]">
+                              <div className="flex items-baseline gap-2">
+                                <h3 className="font-display text-[16px] font-semibold leading-tight tracking-[-0.01em] text-[#2a1a0e]">
                                   {item.label}
                                 </h3>
                                 <span
                                   aria-hidden
-                                  className="mb-1 flex-1 border-b border-dotted border-[#b49a6c]/70"
+                                  className="mb-1 flex-1 border-b border-dotted border-[#b49a6c]/80"
                                 />
-                                <span className="shrink-0 text-[13px] font-semibold tabular-nums text-[#b45309]">
+                                <span className="shrink-0 font-display text-[14px] font-semibold tabular-nums text-[#9a3412]">
                                   {item.price}
                                 </span>
                               </div>
-                              <p className="mt-1 text-[11px] leading-relaxed text-[#7a6449]">
+                              <p className="font-elegant mt-0.5 text-[13.5px] leading-snug text-[#7a6449]">
                                 {item.desc || ""}
                               </p>
                             </div>
@@ -552,9 +540,9 @@ export default function Home() {
                         ))}
                       </div>
 
-                      <div className="relative border-t border-[#c9b189]/50 bg-[#efe2c8]/60 px-5 py-2.5 text-center sm:px-6">
-                        <p className="text-[8px] uppercase tracking-[0.28em] text-[#9a7a45]">
-                          Gracias por su visita · Precios en USD
+                      <div className="relative mx-3 mb-3 mt-1 border-t border-[#c9b189]/60 pt-2 text-center sm:mx-4">
+                        <p className="font-elegant text-[14px] italic leading-none text-[#8a6a38]">
+                          ¡Buen provecho!
                         </p>
                       </div>
                     </article>
