@@ -26,6 +26,56 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+.burger-peek {
+  --peek-x: 34%;
+  --peek-y: -40%;
+  --peek-r: -26deg;
+  transform-origin: 50% 50%;
+  animation:
+    burger-in 1100ms cubic-bezier(0.22, 1, 0.36, 1) both,
+    burger-float 6s ease-in-out 1100ms infinite;
+}
+
+@media (min-width: 640px) {
+  .burger-peek {
+    --peek-x: 30%;
+    --peek-y: -28%;
+  }
+}
+
+@keyframes burger-in {
+  from {
+    opacity: 0;
+    transform: translate3d(calc(var(--peek-x) + 30%), -85%, 0) scale(0.6)
+      rotate(-64deg);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(var(--peek-x), var(--peek-y), 0) scale(1)
+      rotate(var(--peek-r));
+  }
+}
+
+@keyframes burger-float {
+  0%,
+  100% {
+    transform: translate3d(var(--peek-x), var(--peek-y), 0)
+      rotate(var(--peek-r));
+  }
+  50% {
+    transform: translate3d(var(--peek-x), calc(var(--peek-y) + 4%), 0)
+      rotate(calc(var(--peek-r) + 5deg));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .burger-peek {
+    animation: none;
+    transform: translate3d(var(--peek-x), var(--peek-y), 0)
+      rotate(var(--peek-r));
+  }
+}
+
 .scrollbar-none {
   -ms-overflow-style: none;
   scrollbar-width: none;

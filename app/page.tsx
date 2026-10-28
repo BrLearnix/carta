@@ -356,6 +356,17 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#0a0705] overflow-hidden">
+      <div
+        aria-hidden
+        className="pointer-events-none fixed right-0 top-0 z-[60] select-none"
+      >
+        <img
+          src="/img/imgs/burger.png"
+          alt=""
+          className="burger-peek block h-auto w-[190px] max-w-none drop-shadow-[0_28px_45px_rgba(0,0,0,0.6)] sm:w-[340px]"
+        />
+      </div>
+
       <header className="fixed top-0 left-0 w-full z-50 isolate">
         <div className="h-[2px] w-full bg-gradient-to-r from-transparent via-amber-300/90 to-transparent" />
         <div className="relative overflow-hidden border-b border-amber-500/25 shadow-[0_16px_44px_rgba(0,0,0,0.8)]">
@@ -410,15 +421,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="flex min-w-0 flex-1 flex-col items-end gap-1 text-right">
-              <span className="h-px w-7 bg-gradient-to-l from-amber-300 to-transparent" />
-              <span className="font-food whitespace-nowrap text-[18px] leading-none tracking-[0.04em] text-amber-100 [text-shadow:0_2px_10px_rgba(0,0,0,0.95)] sm:text-xl">
-                A domicilio
-              </span>
-              <span className="hidden font-food whitespace-nowrap text-[15px] leading-none tracking-[0.06em] text-stone-300/80 sm:block">
-                Salsas de la casa
-              </span>
-            </div>
+            <div className="min-w-0 flex-1" aria-hidden />
           </div>
 
           <div className="relative border-t border-amber-500/15 bg-black/30 py-1 text-center backdrop-blur-sm sm:hidden">
